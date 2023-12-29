@@ -1,9 +1,32 @@
+import { useContext, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { StateContext } from "../contexts/ContextProvider";
+import axiosClient from "../axios";
+
 
 export default function Login() {
 
-    const submitForm = () => {
-        console.log("form is submitted");
+    const { setCurrentUser, setUserToken } = useContext(StateContext);
+    const [errors, setErrors] = useState('');
+
+    const emailRef= useRef(null);
+    const passwordRef = useRef(null);
+
+
+    const submitForm = (event) => {
+        event.preventDefault();
+
+        setErrors('');
+
+        axiosClient.post('/login', {
+            email: emailRef.current.value,
+            password: passwordRef.current.value,
+        }).then(({data}) => {
+            setCurrentUser(data.user);
+            setUserToken(data.token);
+        }).catch(({response}) => {
+            setErrors(response.data.error);
+        })
     }
 
     return (
@@ -12,7 +35,13 @@ export default function Login() {
                     Sign in to Account
             </h2>
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                <form className="space-y-6" onSubmit={submitForm}>
+                {
+                    errors &&
+                    <div className="bg-red-500 rounded py-2 px-3 text-white">
+                        {errors}
+                    </div>
+                }
+                <form className="space-y-6" onSubmit={(ev) => submitForm(ev)}>
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                         Email address
@@ -21,6 +50,7 @@ export default function Login() {
                         <input
                             id="email"
                             name="email"
+                            ref={emailRef}
                             type="email"
                             autoComplete="email"
                             required
@@ -45,6 +75,7 @@ export default function Login() {
                                 id="password"
                                 name="password"
                                 type="password"
+                                ref={passwordRef}
                                 autoComplete="current-password"
                                 required
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

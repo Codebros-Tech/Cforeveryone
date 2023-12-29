@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +16,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class,'logout']);
+    // Route::apiResource('surveys', SurveyController::class);
+    Route::post('/me', [AuthController::class, 'me']);
+
+
+    // Route::get('/dashboard', [DashboardController::class, 'index']);
 });
+
+Route::post('/signup', [AuthController::class, 'signup']);
+Route::post('/login', [AuthController::class, 'login']);
+// Route::get('/surveys/public/{survey:slug}', [SurveyController::class, 'getBySlug']);
+// Route::post('/surveys/{survey:id}/answer', [SurveyController::class, 'storeAnswer']);
