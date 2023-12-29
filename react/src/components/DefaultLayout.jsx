@@ -1,8 +1,7 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { NavLink, Outlet } from 'react-router-dom'
-import Footer from './Footer'
+import { Link, NavLink, Outlet } from 'react-router-dom'
 
 const user = {
   name: 'funwi Kelsea',
@@ -11,10 +10,12 @@ const user = {
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 }
 const navigation = [
-  { name: 'Dashboard', to: '/'},
-  { name: 'Problems Online', to: '/problems'},
-  { name: "Codes", to: '/codes'}, 
-  { name: "People", to: '/people'}, 
+  { name: 'Dashboard', to: '/dashboard'},
+  { name: 'Issues', to: '/issues'},
+  { name: "Codes", to: '/codes'},
+  { name: "Users", to: '/users'},
+  { name: "Team", to: '/team'},
+  { name: "Guide", to: '/guide'},
 ]
 
 function classNames(...classes) {
@@ -29,7 +30,7 @@ export default function DefaultLayout() {
 
   return (
     <>
-        <div className="min-h-full">
+        <div className='relative'>
             <Disclosure as="nav" className="bg-gray-800">
             {({ open }) => (
                 <>
@@ -85,13 +86,31 @@ export default function DefaultLayout() {
                             >
                             <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                 <Menu.Item>
-                                    <a
+                                    <Link
                                         onClick={(ev) => logout(ev)}
-                                        href="#"
+                                        to="/myinfo"
+                                        className='block px-4 py-2 text-sm text-gray-700'
+                                    >
+                                        My Info
+                                    </Link>
+                                </Menu.Item>
+                                <Menu.Item>
+                                    <Link
+                                        onClick={(ev) => logout(ev)}
+                                        to="#"
                                         className='block px-4 py-2 text-sm text-gray-700'
                                     >
                                         Sign Out
-                                    </a>
+                                    </Link>
+                                </Menu.Item>
+                                <Menu.Item>
+                                    <Link
+                                        onClick={(ev) => logout(ev)}
+                                        to="#"
+                                        className='block px-4 py-2 text-sm text-red-700'
+                                    >
+                                        Delete Account
+                                    </Link>
                                 </Menu.Item>
                             </Menu.Items>
                             </Transition>
@@ -155,7 +174,6 @@ export default function DefaultLayout() {
             )}
             </Disclosure>
             <Outlet />
-            <Footer />
         </div>
     </>
   )

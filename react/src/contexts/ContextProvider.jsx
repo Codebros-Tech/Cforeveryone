@@ -16,7 +16,7 @@ export const ContextProvider = ({ children }) => {
         name: '',
     });
     // token is going be null if there is nothing there.
-    const [ userToken, _setUserToken ] = useState(localStorage.getItem('TOKEN')); 
+    const [ userToken, _setUserToken ] = useState(localStorage.getItem('TOKEN'));
 
     const setUserToken = (token) =>  {
         if (token) {
@@ -32,7 +32,7 @@ export const ContextProvider = ({ children }) => {
         <StateContext.Provider value={{
             currentUser,
             setCurrentUser,
-            userToken, 
+            userToken,
             setUserToken
         }}>
 
@@ -43,5 +43,5 @@ export const ContextProvider = ({ children }) => {
 }
 
 ContextProvider.propTypes  = {
-    children: PropTypes.children,
+    children: PropTypes.node,
 }
