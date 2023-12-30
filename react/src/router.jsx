@@ -7,7 +7,6 @@ import Codes from "./views/Code/Codes"
 import Signup from "./views/Guest/Signup"
 import Issues from "./views/Issues/Issues"
 import Users from "./views/Users/Users"
-import Code from "./views/Code/Code"
 import Issue from "./components/Issue"
 import Team from "./views/Pages/Team"
 import Hero from "./components/Hero"
@@ -22,6 +21,7 @@ import AdminLogin from "./views/Guest/AdminLogin"
 import Main from './views/Layouts/Main'
 import AdminLayout from "./views/Layouts/AdminLayout"
 import ForgotPassword from "./views/Guest/ForgotPassword"
+import CodeCreate from "./views/Code/CodeCreate"
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -39,10 +39,10 @@ const router = createBrowserRouter(
 
             <Route path="/" element={<DefaultLayout />}>
                 <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/codes" element={<Codes />} />
 
-                <Route path="/codes/:id" element={<Code />} />
-                <Route path="/codes/:id/edit" element={<Codes />} />
+                <Route path="/codes/create" element={<CodeCreate />} />
+                <Route path="/codes" element={<Codes />} />
+                <Route path="/codes/:id" element={<CodeCreate />} />
 
                 <Route path="/issues" element={<Issues />} />
                 <Route path="/issues/:id" element={<Issue />} />
