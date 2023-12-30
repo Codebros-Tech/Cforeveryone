@@ -1,7 +1,7 @@
 import { useContext, useRef, useState } from "react";
 import { Link } from "react-router-dom"
-import axiosClient from '../axios';
-import { StateContext } from "../contexts/ContextProvider";
+import axiosClient from '../../axios';
+import { StateContext } from "../../contexts/ContextProvider";
 import { PhotoIcon } from '@heroicons/react/24/outline';
 
 export default function Signup() {

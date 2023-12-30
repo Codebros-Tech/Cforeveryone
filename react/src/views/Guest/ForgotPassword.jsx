@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import axiosClient from "../axios";
+import axiosClient from "../../axios";
 import { Navigate } from 'react-router-dom'
 
 export default function ForgotPassword() {

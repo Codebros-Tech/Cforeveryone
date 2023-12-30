@@ -1,10 +1,11 @@
-import { Fragment, useContext, useEffect } from 'react'
+import { Fragment, useContext, useEffect, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { Link, NavLink, Navigate, Outlet } from 'react-router-dom'
-import Toast from './Toast'
-import axiosClient from '../axios'
-import { StateContext } from '../contexts/ContextProvider'
+import { Link, NavLink, Navigate, Outlet, useNavigate } from 'react-router-dom'
+import Toast from '../../components/Toast'
+import axiosClient from '../../axios'
+import { StateContext } from '../../contexts/ContextProvider'
+import Modal from '../../components/Modal'
 
 const navigation = [
   { name: 'Dashboard', to: '/dashboard'},
@@ -20,14 +21,39 @@ function classNames(...classes) {
 }
 
 export default function DefaultLayout() {
+    const navigate = useNavigate();
+
+    const modalTitle  = "Deactivate account";
+    const modalText = "Are you sure you want to deactivate your account? All of your data will be permanently removed. This action cannot be undone."
+
+    const [ modalState, setModalState] = useState(false);
+
     const { currentUser, setCurrentUser, userToken, setUserToken, showToast } = useContext(StateContext);
 
     useEffect(() => {
         axiosClient.post('/me')
             .then(({data}) => {
-                setCurrentUser(data);
+                setCurrentUser(data.data);
             });
     }, []);
+
+
+    const deleteAccount =  (ev) => {
+        ev.preventDefault();
+        setModalState(true);
+    }
+
+    const deleteFun = () => {
+        axiosClient.delete('/user')
+        .then((response) => {
+            console.log(response);
+            navigate('/');
+            showToast("Account Deleted Successfully");
+        })
+        .catch((error) => {
+            console.error("Error occured during deleting the user", error);
+        });
+    }
 
     const logout = (ev) => {
         ev.preventDefault();
@@ -44,6 +70,10 @@ export default function DefaultLayout() {
 
     if (!userToken) {
         return <Navigate to='/login' />
+    }
+
+    if (modalState) {
+        return <Modal yesFunction={deleteFun} text={modalText} title={modalTitle} />
     }
 
     return (
@@ -90,7 +120,7 @@ export default function DefaultLayout() {
                                 <Menu.Button className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                     <span className="absolute -inset-1.5" />
                                     <span className="sr-only">Open user menu</span>
-                                    <img className="h-8 w-8 rounded-full" src={currentUser.imageUrl} alt="" />
+                                    <img className="h-8 w-8 rounded-full" src={currentUser.profile} alt="" />
                                 </Menu.Button>
                                 </div>
                                 <Transition
@@ -122,7 +152,7 @@ export default function DefaultLayout() {
                                     </Menu.Item>
                                     <Menu.Item>
                                         <Link
-                                            onClick={(ev) => logout(ev)}
+                                            onClick={(ev) => deleteAccount(ev)}
                                             to="#"
                                             className='block px-4 py-2 text-sm text-red-700'
                                         >
@@ -168,7 +198,7 @@ export default function DefaultLayout() {
                         <div className="border-t border-gray-700 pb-3 pt-4">
                         <div className="flex items-center px-5">
                             <div className="flex-shrink-0">
-                                <img className="h-10 w-10 rounded-full" src={currentUser.image} alt="" />
+                                <img className="h-10 w-10 rounded-full" src={currentUser.profile} alt="" />
                                 </div>
                                 <div className="ml-3">
                                 <div className="text-base font-medium leading-none text-white">{currentUser.name}</div>

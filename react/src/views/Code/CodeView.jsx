@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
-import PageComponent from '../components/PageComponent'
+import PageComponent from '../../components/PageComponent.jsx'
 import { LinkIcon, PhotoIcon, TrashIcon } from '@heroicons/react/24/outline';
 import TButton from '../components/core/TButton';
-import axiosClient from '../axios.js';
+import axiosClient from '../../axios.js';
 import { useNavigate, useParams } from 'react-router-dom';
-import SurveyQuestions from './SurveyQuestions.jsx';
-import { useStateContext } from '../contexts/ContextProvider.jsx';
+import SurveyQuestions from './SurveyQuestions.js';
+import { useStateContext } from '../../contexts/ContextProvider.jsx';
 
 export default function CodeView() {
     // useNavigate will provide you a variable that you use to move from one route to another.

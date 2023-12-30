@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import {  Navigate, Outlet } from "react-router-dom"
-import { StateContext } from "../contexts/ContextProvider";
+import { StateContext } from "../../contexts/ContextProvider";
 
 export default function GuestLayout() {
     const {  userToken } = useContext(StateContext);

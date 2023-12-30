@@ -24,6 +24,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'matricule' => $data['matricule'],
             'profile' => $data['image'],
             'password' => bcrypt($data['password']),
         ]);
@@ -75,6 +76,27 @@ class AuthController extends Controller
 
     public function me(Request $request) {
         return new UserResource($request->user());
+    }
+
+    public function delete(Request $request) {
+        // delete the user token,
+        $user = $request->user();
+        $token = $request->user()->currentAccessToken();
+        $token->delete();
+
+        // delete the image of the user
+        if ($user->image) {
+            if (File::exists($user->image)) {
+                File::delete($user->image);
+            }
+        }
+
+        // delete all of the user and everything the user has every created.
+
+        // delete the user information
+        $user->delete();
+
+        return response('Delete successful', 200);
     }
 
     private function saveImage($image) {

@@ -19,6 +19,7 @@ export const ContextProvider = ({ children }) => {
     // this state will be used to make the user information available globally if the user is logged in
     const [ currentUser, setCurrentUser ] = useState({
         name: '',
+        profile: '',
     });
     // token is going be null if there is nothing there.
     const [ userToken, _setUserToken ] = useState(localStorage.getItem('TOKEN'));
@@ -46,7 +47,7 @@ export const ContextProvider = ({ children }) => {
             setUserToken,
             toast,
             setToast,
-            showToast
+            showToast,
         }}>
 
             {children}

@@ -1,5 +1,5 @@
-import Code from "../components/Code";
-import PageComponent from "../components/PageComponent";
+import Code from "../Code/Code";
+import PageComponent from "../../components/PageComponent";
 
 export default function Dashboard() {
     return (
@@ -21,7 +21,7 @@ export default function Dashboard() {
                 </div>
             </div>
 
-            <div className="block w-full mt-5"> 
+            <div className="block w-full mt-5">
                 <Code />
             </div>
         </PageComponent>

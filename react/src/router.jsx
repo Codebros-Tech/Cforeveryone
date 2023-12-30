@@ -1,27 +1,27 @@
 import {Route, createBrowserRouter, createRoutesFromElements } from "react-router-dom"
-import Dashboard from "./views/Dashboard"
-import Login from './views/Login'
-import GuestLayout from "./components/GuestLayout"
-import DefaultLayout from "./components/DefaultLayout"
-import Codes from "./views/Codes"
-import Signup from "./views/Signup"
-import Issues from "./views/Issues"
-import Users from "./views/Users"
-import Code from "./components/Code"
+import Dashboard from "./views/Users/Dashboard"
+import Login from './views/Guest/Login'
+import GuestLayout from "./views/Layouts/GuestLayout"
+import DefaultLayout from "./views/Layouts/DefaultLayout"
+import Codes from "./views/Code/Codes"
+import Signup from "./views/Guest/Signup"
+import Issues from "./views/Issues/Issues"
+import Users from "./views/Users/Users"
+import Code from "./views/Code/Code"
 import Issue from "./components/Issue"
-import Team from "./views/Team"
+import Team from "./views/Pages/Team"
 import Hero from "./components/Hero"
-import About from "./views/About"
+import About from "./views/Pages/About"
 import NotFound from './components/NotFound'
-import UserInfo from "./views/UserInfo"
-import InfoUpdate from "./views/InfoUpdate"
-import AccountInfo from "./views/AccountInfo"
-import Features from "./views/Features"
-import Guide from "./views/Guide"
-import AdminLogin from "./views/AdminLogin"
-import Main from './views/Main'
-import AdminLayout from "./views/AdminLayout"
-import ForgotPassword from "./views/ForgotPassword"
+import UserInfo from "./views/Users/UserInfo"
+import InfoUpdate from "./views/Users/InfoUpdate"
+import AccountInfo from "./views/Users/AccountInfo"
+import Features from "./views/Guest/Features"
+import Guide from "./views/Pages/Guide"
+import AdminLogin from "./views/Guest/AdminLogin"
+import Main from './views/Layouts/Main'
+import AdminLayout from "./views/Layouts/AdminLayout"
+import ForgotPassword from "./views/Guest/ForgotPassword"
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -31,10 +31,6 @@ const router = createBrowserRouter(
                 <Route path="/" element={<Hero />} />
 
                 <Route path="/features" element={<Features />} />
-
-                <Route path="/guide" element={<Guide />} />
-
-                <Route path="/team" element={<Team />} />
             </Route>
 
             <Route path="/admin" element={<AdminLayout />}>
@@ -44,9 +40,10 @@ const router = createBrowserRouter(
             <Route path="/" element={<DefaultLayout />}>
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/codes" element={<Codes />} />
-                <Route path="/codes/create" element={<Codes />} />
+
                 <Route path="/codes/:id" element={<Code />} />
                 <Route path="/codes/:id/edit" element={<Codes />} />
+
                 <Route path="/issues" element={<Issues />} />
                 <Route path="/issues/:id" element={<Issue />} />
 
@@ -55,6 +52,9 @@ const router = createBrowserRouter(
 
                 <Route path="/myinfo" element={<UserInfo />} />
                 <Route path="/myinfo/edit" element={<InfoUpdate />} />
+                <Route path="/guide" element={<Guide />} />
+
+                <Route path="/team" element={<Team />} />
 
                 <Route path="/*" element={<NotFound />} />
             </Route>

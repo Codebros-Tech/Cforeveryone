@@ -1,7 +1,7 @@
 import { PlusIcon } from '@heroicons/react/24/outline'
 import   { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid';
-import QuestionEditor from '../components/QuestionEditor';
+import QuestionEditor from '../../components/QuestionEditor';
 import PropTypes from 'prop-types';
 
 
