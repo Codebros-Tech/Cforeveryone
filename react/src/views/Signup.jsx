@@ -2,6 +2,7 @@ import { useContext, useRef, useState } from "react";
 import { Link } from "react-router-dom"
 import axiosClient from '../axios';
 import { StateContext } from "../contexts/ContextProvider";
+import { PhotoIcon } from '@heroicons/react/24/outline';
 
 export default function Signup() {
 
@@ -12,6 +13,7 @@ export default function Signup() {
     const emailRef= useRef(null);
     const passwordRef = useRef(null);
     const passwordConfirmationRef = useRef(null);
+    const [imageData, setImageData] = useState(null)
 
     const [errors, setErrors] = useState({__html: ''});
 
@@ -21,8 +23,10 @@ export default function Signup() {
         setErrors({ __html: ''});
 
         axiosClient.post('/signup', {
+            image: imageData,
             name: nameRef.current.value,
             email: emailRef.current.value,
+            matricule: matriculeRef.current.value,
             password: passwordRef.current.value,
             password_confirmation: passwordConfirmationRef.current.value,
         })
@@ -32,13 +36,30 @@ export default function Signup() {
         })
         // destructure the error to get the response.
         .catch((error) => {
-            if (error.response) {
+            if (error.response && error.response.data) {
                 const finalErrors = Object.values(error.response.data.errors).reduce((accum, next) => [...accum, ...next], []);
                 // <br /> will be added at the end of each string to move us to the next line.
                 setErrors({__html: finalErrors.join("<br>")})
             }
             console.log(error);
         });
+    }
+
+    const onImageChoose = (ev) => {
+        // returns the file that the user entered, in this case its an image.
+        const file = ev.target.files[0];
+
+        // this is the function that reads the image.
+        const reader = new FileReader();
+
+        // when the reader loads, it will contain a variable that contains the result.
+        reader.onload = () => {
+            setImageData(reader.result);
+
+            ev.target.value = ""; // we then emptied the component containing the image.
+        }
+
+        reader.readAsDataURL(file);
     }
 
     return (
@@ -53,6 +74,36 @@ export default function Signup() {
                 }
 
                 <form className="space-y-6" onSubmit={submitForm}>
+
+                    <div className="mt-1 flex items-center">
+                        {
+                            imageData &&
+                                <img
+                                    src={imageData}
+                                    alt=""
+                                    className="w-40 h-40 object-cover"
+                                />
+                        }
+                        {
+                            !imageData &&
+                                <span className="flex items-center justify-center text-gray-400 h-12 w-12 overflow-hidden rounded-full bg-gray-100">
+                                    <PhotoIcon className='w-10 h-10'/>
+                                </span>
+                        }
+                        <button
+                            type="button"
+                            className="relative ml-5 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4
+                            text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:indigo-500 focus:ring-offset-2"
+                        >
+                            <input
+                                type="file"
+                                className='absolute left-0 top-0 right-0 bottom-0 opacity-0'
+                                onChange={onImageChoose}
+                            />
+                            Change
+                        </button>
+                    </div>
+
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                         Name

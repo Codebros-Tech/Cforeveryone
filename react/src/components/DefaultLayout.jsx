@@ -20,15 +20,14 @@ function classNames(...classes) {
 }
 
 export default function DefaultLayout() {
+    const { currentUser, setCurrentUser, userToken, setUserToken, showToast } = useContext(StateContext);
 
     useEffect(() => {
         axiosClient.post('/me')
-            .then((data) => {
+            .then(({data}) => {
                 setCurrentUser(data);
-            })
+            });
     }, []);
-
-    const { currentUser, setCurrentUser, userToken, setUserToken } = useContext(StateContext);
 
     const logout = (ev) => {
         ev.preventDefault();
@@ -39,6 +38,7 @@ export default function DefaultLayout() {
             }).catch((error) => {
                 console.log(error);
                 localStorage.clear();
+                showToast('Logut successful')
             })
     }
 
@@ -105,7 +105,6 @@ export default function DefaultLayout() {
                                 <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                     <Menu.Item>
                                         <Link
-                                            onClick={(ev) => logout(ev)}
                                             to="/myinfo"
                                             className='block px-4 py-2 text-sm text-gray-700'
                                         >
@@ -169,7 +168,7 @@ export default function DefaultLayout() {
                         <div className="border-t border-gray-700 pb-3 pt-4">
                         <div className="flex items-center px-5">
                             <div className="flex-shrink-0">
-                                <img className="h-10 w-10 rounded-full" src={currentUser.imageUrl} alt="" />
+                                <img className="h-10 w-10 rounded-full" src={currentUser.image} alt="" />
                                 </div>
                                 <div className="ml-3">
                                 <div className="text-base font-medium leading-none text-white">{currentUser.name}</div>

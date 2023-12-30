@@ -24,8 +24,13 @@ export default function Login() {
         }).then(({data}) => {
             setCurrentUser(data.user);
             setUserToken(data.token);
-        }).catch(({response}) => {
-            setErrors(response.data.error);
+        }).catch((error) => {
+            if (error.response) {
+                const finalErrors = Object.values(error.response.data.errors).reduce((accum, next) => [...accum, ...next], []);
+                // <br /> will be added at the end of each string to move us to the next line.
+                setErrors({__html: finalErrors.join("<br>")})
+            }
+            console.log(error);
         })
     }
 
@@ -35,12 +40,12 @@ export default function Login() {
                     Sign in to Account
             </h2>
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+
                 {
-                    errors &&
-                    <div className="bg-red-500 rounded py-2 px-3 text-white">
-                        {errors}
+                    errors.__html && <div className="bg-red-500 rounded py-2 px-3 text-white" dangerouslySetInnerHTML={errors}>
                     </div>
                 }
+
                 <form className="space-y-6" onSubmit={(ev) => submitForm(ev)}>
                     <div>
                         <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">

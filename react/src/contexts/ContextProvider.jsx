@@ -7,9 +7,14 @@ export const StateContext = createContext({
     setCurrentUser: () => {},
     userToken: null,
     setUserToken: () => {},
+    toast: {},
+    setToast: () => {},
+    showToast: () => {},
 });
 
 export const ContextProvider = ({ children }) => {
+
+    const [toast, setToast] = useState({ message: "", show: false});
 
     // this state will be used to make the user information available globally if the user is logged in
     const [ currentUser, setCurrentUser ] = useState({
@@ -17,6 +22,11 @@ export const ContextProvider = ({ children }) => {
     });
     // token is going be null if there is nothing there.
     const [ userToken, _setUserToken ] = useState(localStorage.getItem('TOKEN'));
+
+    const showToast = (message) => {
+        setToast({message: message, show: true});
+    }
+
 
     const setUserToken = (token) =>  {
         if (token) {
@@ -33,7 +43,10 @@ export const ContextProvider = ({ children }) => {
             currentUser,
             setCurrentUser,
             userToken,
-            setUserToken
+            setUserToken,
+            toast,
+            setToast,
+            showToast
         }}>
 
             {children}

@@ -19,13 +19,25 @@ import AccountInfo from "./views/AccountInfo"
 import Features from "./views/Features"
 import Guide from "./views/Guide"
 import AdminLogin from "./views/AdminLogin"
+import Main from './views/Main'
+import AdminLayout from "./views/AdminLayout"
+import ForgotPassword from "./views/ForgotPassword"
 
 const router = createBrowserRouter(
     createRoutesFromElements(
         <Route>
-            <Route path="/" element={<Hero />} />
 
-            <Route path="/admin" element={<GuestLayout />}>
+            <Route element={<Main />}>
+                <Route path="/" element={<Hero />} />
+
+                <Route path="/features" element={<Features />} />
+
+                <Route path="/guide" element={<Guide />} />
+
+                <Route path="/team" element={<Team />} />
+            </Route>
+
+            <Route path="/admin" element={<AdminLayout />}>
                 <Route path="login" element={<AdminLogin />} />
             </Route>
 
@@ -41,14 +53,6 @@ const router = createBrowserRouter(
                 <Route path="/users" element={<Users />} />
                 <Route path="/users/:username" element={<AccountInfo />} />
 
-                <Route path="/team" element={<Team />} />
-
-                <Route path="/hero" element={<Hero />} />
-
-                <Route path="/features" element={<Features />} />
-
-                <Route path="/guide" element={<Guide />} />
-
                 <Route path="/myinfo" element={<UserInfo />} />
                 <Route path="/myinfo/edit" element={<InfoUpdate />} />
 
@@ -59,6 +63,7 @@ const router = createBrowserRouter(
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/about" element={<About />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
             </Route>
         </Route>
     )

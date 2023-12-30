@@ -21,7 +21,7 @@ export default function Dashboard() {
                 </div>
             </div>
 
-            <div className="block w-full mt-5">
+            <div className="block w-full mt-5"> 
                 <Code />
             </div>
         </PageComponent>
