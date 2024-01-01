@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CodeController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,14 +21,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class,'logout']);
-    // Route::apiResource('surveys', SurveyController::class);
+    Route::apiResource('codes', CodeController::class);
+    Route::get('/codes/mycodes', [CodeController::class, 'mycodes']);
     Route::post('/me', [AuthController::class, 'me']);
     Route::delete('/user', [AuthController::class, 'delete']);
 
-    // Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+
+    // things related to a user.
+    Route::get('/users', [HomeController::class, 'users']);
+
 });
 
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
-// Route::get('/surveys/public/{survey:slug}', [SurveyController::class, 'getBySlug']);
-// Route::post('/surveys/{survey:id}/answer', [SurveyController::class, 'storeAnswer']);

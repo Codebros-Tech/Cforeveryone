@@ -21,7 +21,7 @@ export default function TButton({
         "text-sm",
         "border",
         "border-2",
-        "border-transparent",
+        "border-transparent"
     ];
 
     if (link) {

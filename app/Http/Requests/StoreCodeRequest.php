@@ -11,7 +11,13 @@ class StoreCodeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
+    }
+
+    protected function prepareForValidation() {
+        $this->merge([
+            'user_id' => $this->user()->id
+        ]);
     }
 
     /**
@@ -22,7 +28,11 @@ class StoreCodeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'text' => 'required|string',
+            'user_id'  => 'exists:users,id',
+            'errorImage' => 'string|nullable',
         ];
     }
 }

@@ -49,4 +49,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function codes() {
+        return $this->hasMany(Code::class);
+    }
+
+    public function codeSolutions() {
+        return $this->hasMany(CodeSolution::class);
+    }
 }

@@ -61,6 +61,7 @@ export default function DefaultLayout() {
             .then(() => {
                 setCurrentUser({});
                 setUserToken(null);
+                navigate('/');
             }).catch((error) => {
                 console.log(error);
                 localStorage.clear();

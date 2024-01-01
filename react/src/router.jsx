@@ -3,7 +3,6 @@ import Dashboard from "./views/Users/Dashboard"
 import Login from './views/Guest/Login'
 import GuestLayout from "./views/Layouts/GuestLayout"
 import DefaultLayout from "./views/Layouts/DefaultLayout"
-import Codes from "./views/Code/Codes"
 import Signup from "./views/Guest/Signup"
 import Issues from "./views/Issues/Issues"
 import Users from "./views/Users/Users"
@@ -22,6 +21,9 @@ import Main from './views/Layouts/Main'
 import AdminLayout from "./views/Layouts/AdminLayout"
 import ForgotPassword from "./views/Guest/ForgotPassword"
 import CodeCreate from "./views/Code/CodeCreate"
+import CodeShow from "./views/Code/CodeShow"
+import CodeIndex from "./views/Code/CodeIndex"
+import MyCodes from "./views/Code/MyCodes"
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -40,9 +42,11 @@ const router = createBrowserRouter(
             <Route path="/" element={<DefaultLayout />}>
                 <Route path="/dashboard" element={<Dashboard />} />
 
+                <Route path="/codes" element={<CodeIndex />} />
+                <Route path="/codes/mycodes" element={<MyCodes />} />
                 <Route path="/codes/create" element={<CodeCreate />} />
-                <Route path="/codes" element={<Codes />} />
-                <Route path="/codes/:id" element={<CodeCreate />} />
+                <Route path="/codes/:id/edit" element={<CodeCreate />} />
+                <Route path="/codes/:id" element={<CodeShow />} />
 
                 <Route path="/issues" element={<Issues />} />
                 <Route path="/issues/:id" element={<Issue />} />

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import PageComponent from '../../components/PageComponent.jsx'
-import { LinkIcon, TrashIcon } from '@heroicons/react/24/outline';
+import {  TrashIcon } from '@heroicons/react/24/outline';
 import axiosClient from '../../axios.js';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -8,48 +8,39 @@ import TButton from '../../components/TButton.jsx';
 import { StateContext } from '../../contexts/ContextProvider.jsx';
 
 export default function CodeCreate() {
-    // useNavigate will provide you a variable that you use to move from one route to another.
     const navigate = useNavigate()
+
     const { id } = useParams()
     const [error, setError] = useState()
     const [loading, setLoading] = useState(false);
     const { showToast } = useContext(StateContext);
 
-    const [codeText, setCodeText] = useState('');
-
-    const [survey, setSurvey] = useState({
+    const [code, setCode] = useState({
         title: "",
-        slug: "",
-        status: false,
+        text: "",
         description: "",
-        image: null,
-        image_url: null,
-        expire_date: "",
-        questions: [],
-    })
+        errorImage: null,
+    });
+
 
     const onSubmit = (e) => {
         e.preventDefault()
 
-        const payload = { ...survey }
-        if (payload.image) {
-            payload.image = payload.image_url;
-            delete payload.image_url;
-        }
+        const payload = { ...code }
 
         let res = null
-        // the way to transfer the data if it was a normal survey creation.
+        // the way to transfer the data if it was a normal code creation.
         if (id) {
-            res = axiosClient.put(`/surveys/${id}`, payload)
+            res = axiosClient.put(`/codes/${id}`, payload)
 
         } else {
-            res = axiosClient.post('/surveys', payload)
+            res = axiosClient.post('/codes', payload)
         }
 
         res
         .then((response) => {
             console.log(response);
-            navigate('/surveys');
+            navigate('/codes');
             if (id) {
                 showToast("Code updated successfully");
             } else {
@@ -64,73 +55,60 @@ export default function CodeCreate() {
     }
 
     const onImageChoose = (ev) => {
-        // returns the file that the user entered, in this case its an image.
         const file = ev.target.files[0];
-
-        // this is the function that reads the image.
         const reader = new FileReader();
-
-        // when the reader loads, it will contain a variable that contains the result.
         reader.onload = () => {
-            setSurvey({
-                ...survey,
-                image: file, // this will contain the actual file in .
-                // reader.result contains the content of the file that's in this case the image.
-                image_url: reader.result, // image url will return the file in bytes.
+            setCode({
+                ...code,
+                errorImage: reader.result,
             });
-
-            ev.target.value = ""; // we then emptied the component containing the image.
+            ev.target.value = "";
         }
 
-        reader.readAsDataURL(file); // this will read the content of the file as a data url and call the onload function when the image has finished loading.
+        reader.readAsDataURL(file);
     }
 
     useEffect(() => {
-        // some code that will run if we are under a particular survey
+        // some code that will run if we are under a particular code
         if (id) {
             setLoading(true);
-            axiosClient.get(`/surveys/${id}`)
+            axiosClient.get(`/codes/${id}`)
                 .then(({data}) => {
                     setLoading(false);
-                    setSurvey(data.data);
+                    setCode(data.code);
                 })
         }
     }, []);
 
-    const deleteSurvey = (survey) => {
-        axiosClient.delete(`/surveys/${survey}`)
+    const deletecode = (code) => {
+        axiosClient.delete(`/codes/${code}`)
             .then(({data}) => {
                 console.log(data);
-                showToast('Survey deleted successfully');
+                showToast('code deleted successfully');
             }).catch((error) => {
                 showToast(error.message);
             })
     }
-
 
     return (
         <PageComponent
             title={!id ?  "Post Your Code" : "Update The Code"}
             buttons={
                 (   id &&
-                    <div className='flex gap-2'>
-                        <TButton color='green' href={`/surveys/public/${survey.slug}`}>
-                            <LinkIcon className='h-4 w-4 mr-2' />
-                            Public Link
-                        </TButton>
-                        <TButton onClick={() => deleteSurvey(survey)} color='red' to='/surveys/create'>
+                    <div className='md:flex gap-2'>
+                        <TButton onClick={() => deletecode(code)} color='red' to='/codes/create'>
                             <TrashIcon className='h-4 w-4 mr-2' />
                             Delete
                         </TButton>
                     </div>
                 )
             }
-            small='Posting your code can help you get correction or feedback which can help foster progress'
+            small={!id ? 'Posting your code can help you get correction or feedback which can help foster progress': ''}
         >
         <form method="POST" onSubmit={onSubmit}>
                 {
                     loading &&
-                        <div className='text-xl text-center'>Loading ...</div>
+                        <div className='text-xl text-center'>Patience is the key to a good life....</div>
                 }
                 {
                     !loading &&
@@ -153,11 +131,11 @@ export default function CodeCreate() {
                                     type="text"
                                     name='title'
                                     id='title'
-                                    value={survey.title}
+                                    value={code.title}
                                     placeholder='Code Title'
                                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-50
                                     focus:ring-indigo-500 sm:text-sm"
-                                    onChange={(e) => setSurvey({...survey, title: e.target.value})}
+                                    onChange={(e) => setCode({...code, title: e.target.value})}
                                     required
                                 />
                             </div>
@@ -174,10 +152,10 @@ export default function CodeCreate() {
                                 <textarea
                                     name='description'
                                     id="description"
-                                    value={survey.description}
+                                    value={code.description}
                                     placeholder="Describe Your Code"
                                     className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-50 focus:ring-indigo-500 sm:text-sm'
-                                    onChange={(ev) => setSurvey({...survey, description: ev.target.value})}
+                                    onChange={(ev) => setCode({...code, description: ev.target.value})}
                                     required
                                 >
                                 </textarea>
@@ -186,12 +164,13 @@ export default function CodeCreate() {
 
                             <div className="col-span-6 sm:col-span-3">
                                 <label
-                                    htmlFor='description'
+                                    htmlFor='text'
                                     className="block text-sm font-medium text-gray-700"
                                 >
                                     Code Text
                                 </label>
-                                <textarea value={codeText} className="w-full mt-1 rounded-sm overflow-y-auto overflow-x-auto" onChange={(ev) => setCodeText(ev.target.value)} id="" cols="30" rows="15">
+                                <textarea value={code.text} className="w-full mt-1 rounded-sm overflow-y-auto overflow-x-auto"
+                                     onChange={(ev) => setCode({...code, text: ev.target.value})} id="text" cols="30" rows="15">
                                 </textarea>
                             </div>
                             {/* Image */}
@@ -213,9 +192,9 @@ export default function CodeCreate() {
                                             Input Screenshot  of error message
                                         </button>
                                     {
-                                        survey.image_url &&
+                                        code.errorImage &&
                                             <img
-                                                src={survey.image_url}
+                                                src={code.errorImage}
                                                 alt=""
                                                 className="w-full h-auto object-cover"
                                             />
@@ -226,7 +205,7 @@ export default function CodeCreate() {
                             </div>
                             <div className='bg-gray-50 px-4 py-3 text-right sm:px-6'>
                                 <TButton>
-                                    Post the Code
+                                    {!id ? 'Post the Code' : 'Update the Code'}
                                 </TButton>
                             </div>
                         </div>

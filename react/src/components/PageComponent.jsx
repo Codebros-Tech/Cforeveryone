@@ -4,7 +4,7 @@ export default function PageComponent({small = "" ,title, buttons = "", children
     return (
         <>
             <header className="bg-white shadow">
-                <div className="flex items-center justify-between mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+                <div className="sm:flex ms-auto items-center justify-between mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                     <h1 className="text-xl sm:text-3xl font-bold tracking-tight text-gray-900">
                         {title}
                         {small && <span className='w-full text-sm font-normal mt-1 block text-gray-800'>{small}</span>}

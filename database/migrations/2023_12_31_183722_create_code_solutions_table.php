@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('codes', function (Blueprint $table) {
+        Schema::create('code_solutions', function (Blueprint $table) {
             $table->id();
-            $table->text('title');
-            $table->text('description');
-            $table->longText('text');
-            $table->string('errorImage')->nullable();
+            $table->string('description');
+            $table->string('text');
+            $table->foreignId('code_id')->references('id')->on('codes');
             $table->foreignId('user_id')->references('id')->on('users');
             $table->timestamps();
         });
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('codes');
+        Schema::dropIfExists('code_solutions');
     }
 };
