@@ -10,9 +10,16 @@ export const StateContext = createContext({
     toast: {},
     setToast: () => {},
     showToast: () => {},
+    allCodes: [],
+    setAllCodes: () => {},
+    deleteCodeId: () => {}
 });
 
 export const ContextProvider = ({ children }) => {
+
+    const [allCodes, setAllCodes] = useState([]);
+
+    const [myCodes, setMyCodes] = useState([]);
 
     const [toast, setToast] = useState({ message: "", show: false});
 
@@ -26,6 +33,13 @@ export const ContextProvider = ({ children }) => {
 
     const showToast = (message) => {
         setToast({message: message, show: true});
+    }
+
+    const deleteCodeId = (codeId) => {
+        const newAllCodes = allCodes.filter(c => c.codeId !== codeId);
+        const newMyCodes = myCodes.filter(c => c.codeId !== codeId);
+        setMyCodes(newMyCodes);
+        setAllCodes(newAllCodes);
     }
 
 
@@ -48,6 +62,11 @@ export const ContextProvider = ({ children }) => {
             toast,
             setToast,
             showToast,
+            allCodes,
+            setAllCodes,
+            myCodes,
+            setMyCodes,
+            deleteCodeId
         }}>
 
             {children}

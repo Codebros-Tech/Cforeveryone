@@ -1,26 +1,28 @@
-import Code from "./Code";
 import PageComponent from "../../components/PageComponent";
 import TButton from "../../components/TButton";
-import { useContext, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import axiosClient from "../../axios";
-import { StateContext } from "../../contexts/ContextProvider";
+import { useParams } from "react-router-dom";
+import Code from '../Code/Code'
 
-export default function CodeIndex() {
+export default function CodeComments() {
+    const { id } = useParams();
     const [loading, setLoading ] = useState(false);
-
-    const { allCodes, setAllCodes } = useContext(StateContext);
+    const [comments, setComments] = useState([]);
+    const [code, setCode] = useState({});
 
     useEffect(() => {
         setLoading(true);
-        axiosClient.get('/codes')
+        axiosClient.get(`/codes/${id}/comments`)
             .then(({data}) => {
-                setAllCodes(data.codes);
+                setComments(data.comments);
+                setCode(data.code);
                 setLoading(false);
             })
     }, []);
 
     return (
-        <PageComponent title="All Codes" buttons={
+        <PageComponent title={code.title ?? "Code has no title"} buttons={
             <div className='flex gap-2'>
                 <TButton color='green' to="/codes/create">
                     New
@@ -29,18 +31,24 @@ export default function CodeIndex() {
                     My Codes.
                 </TButton>
             </div>
-        }>
+        }
+        small={`Code Description ${code.description}`}
+        >
+
             {
                 !loading  &&
                 <div>
+                    <Code code={code} commentHide />
                 {
-                    allCodes &&
-                        allCodes.map((code, index) => (
-                            <Code key={index} code={code} />
+                    comments &&
+                        comments.map((comment, index) => (
+                            <div key={index}>
+                                { comment.comment }
+                            </div>
                         ))
                 }
                 {
-                    allCodes.length === 0 &&
+                    comments.length === 0 &&
                         <div className="flex justify-center items-center">
                             No  Codes have been posted
                         </div>

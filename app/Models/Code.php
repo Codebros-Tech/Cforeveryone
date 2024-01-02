@@ -20,4 +20,8 @@ class Code extends Model
     public function user() {
         $this->belongsTo(User::class, 'user_id');
     }
+
+    public function comments() {
+        return $this->hasMany(CodeComment::class);
+    }
 }

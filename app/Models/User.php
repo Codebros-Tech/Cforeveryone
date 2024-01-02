@@ -24,6 +24,8 @@ class User extends Authenticatable
         'department',
         'username',
         'profile',
+        'about',
+        'job',
         'level',
         'role',
         'password',

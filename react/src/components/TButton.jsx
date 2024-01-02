@@ -18,7 +18,7 @@ export default function TButton({
         "flex",
         "whitespace-nowrap",
         "items-center",
-        "text-sm",
+        "text-xs",
         "border",
         "border-2",
         "border-transparent"
@@ -93,8 +93,9 @@ export default function TButton({
             ...classes,
             "p-0",
             "py-2",
-            "px-4",
-            "rounded-md"
+            "px-2",
+            "rounded-md",
+            "text-sm"
         ];
     }
 

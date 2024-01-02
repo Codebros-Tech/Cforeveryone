@@ -1,7 +1,6 @@
 import Code from "../Code/Code";
 import PageComponent from "../../components/PageComponent";
 import TButton from "../../components/TButton";
-import { LinkIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import axiosClient from '../../axios';
 
@@ -26,11 +25,9 @@ export default function Dashboard() {
         <PageComponent title="Dashboard"  buttons={
             <div className='flex gap-2'>
                 <TButton color='green' to="/codes/mycodes">
-                    <LinkIcon className='h-4 w-4 mr-2' />
                     All My Codes
                 </TButton>
                 <TButton color='green' to="/codes">
-                    <LinkIcon className='h-4 w-4 mr-2' />
                     Browse Codes
                 </TButton>
             </div>

@@ -47,12 +47,12 @@ export default function DefaultLayout() {
         axiosClient.delete('/user')
         .then((response) => {
             console.log(response);
-            navigate('/');
             showToast("Account Deleted Successfully");
         })
         .catch((error) => {
             console.error("Error occured during deleting the user", error);
         });
+        navigate('/');
     }
 
     const logout = (ev) => {

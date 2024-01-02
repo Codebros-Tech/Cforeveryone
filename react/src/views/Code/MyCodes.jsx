@@ -1,19 +1,19 @@
 import Code from "./Code";
 import PageComponent from "../../components/PageComponent";
-import { LinkIcon} from '@heroicons/react/24/outline';
 import TButton from "../../components/TButton";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axiosClient from "../../axios";
+import { StateContext } from "../../contexts/ContextProvider";
 
 export default function MyCodes() {
-    const [codes, setCodes] = useState([]);
     const [loading, setLoading] = useState(false);
+    const { myCodes, setMyCodes } = useContext(StateContext);
 
     useEffect(() => {
         setLoading(true);
         axiosClient.get('/codes')
             .then(({data}) => {
-                setCodes(data.codes);
+                setMyCodes(data.codes);
                 setLoading(false);
             })
             .catch((error) => {
@@ -24,18 +24,12 @@ export default function MyCodes() {
 
 
     return (
-        <PageComponent title="My Codes page." buttons={
+        <PageComponent title="My Codes" buttons={
             <div className='flex gap-2'>
                 <TButton color='green' to="/codes/create">
-                    <LinkIcon className='h-4 w-4 mr-2' />
-                    Post Code
-                </TButton>
-                <TButton color='green' to="/codes/mycodes">
-                    <LinkIcon className='h-4 w-4 mr-2' />
-                    My Codes
+                    New
                 </TButton>
                 <TButton color='green' to="/codes">
-                    <LinkIcon className='h-4 w-4 mr-2' />
                     All Codes
                 </TButton>
             </div>
@@ -50,13 +44,13 @@ export default function MyCodes() {
                 !loading &&
                 <div>
                 {
-                    codes &&
-                        codes.map((code, index) => (
+                    myCodes &&
+                        myCodes.map((code, index) => (
                             <Code key={index} code={code} />
                         ))
                 }
                 {
-                    codes.length === 0 &&
+                    myCodes.length === 0 &&
                         <div className="flex justify-center items-center">
                             You have not posted Any codes yet.
                         </div>

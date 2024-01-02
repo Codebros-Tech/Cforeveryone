@@ -2,26 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CodeResource;
 use App\Models\CodeComment;
 use App\Http\Requests\StoreCodeCommentRequest;
 use App\Http\Requests\UpdateCodeCommentRequest;
+use App\Models\Code;
 
 class CodeCommentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Code $code)
     {
-        //
-    }
+        $comments = $code->comments;
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return response([
+            'comments' => $comments,
+            'code' => new CodeResource($code),
+        ]);
     }
 
     /**
@@ -29,7 +28,13 @@ class CodeCommentController extends Controller
      */
     public function store(StoreCodeCommentRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $comment = CodeComment::create($data);
+
+        return response([
+            'comment' => $comment,
+        ]);
     }
 
     /**

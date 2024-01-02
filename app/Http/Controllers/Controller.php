@@ -26,16 +26,16 @@ class Controller extends BaseController
             if ($image === false) {
                 throw new \Exception("base 64 decode failed");
             }
-        }
 
-        $file = Str::random() . '.'. $type;
-        $absolutePath = public_path($dir);
-        $relativePath = $dir . $file;
-        if (!File::exists($absolutePath)) {
-            File::makeDirectory($absolutePath, 0755, true);
-        }
-        file_put_contents($relativePath, $image);
+            $file = Str::random() . '.'. $type;
+            $absolutePath = public_path($dir);
+            $relativePath = $dir . $file;
+            if (!File::exists($absolutePath)) {
+                File::makeDirectory($absolutePath, 0755, true);
+            }
+            file_put_contents($relativePath, $image);
 
-        return $relativePath;
+            return $relativePath;
+        }
     }
 }

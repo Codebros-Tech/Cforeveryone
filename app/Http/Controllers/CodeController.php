@@ -83,17 +83,17 @@ class CodeController extends Controller
             return abort(403, "Unauthorized Action");
         }
 
+        // delete the old image if it exists
+        if ($code->errorImage) {
+            $absolutePath = public_path($code->errorImage);
+            File::delete($absolutePath);
+        }
+
 
         // replace the image
         if (isset($updatedCode['errorImage'])) {
             $relativePath = $this->saveImage($updatedCode['errorImage'], 'images/codeLogs/');
             $updatedCode['errorImage'] = $relativePath;
-        }
-
-        // delete the old image if it exists
-        if ($code->errorImage) {
-            $absolutePath = public_path($code->errorImage);
-            File::delete($absolutePath);
         }
 
 
