@@ -42,23 +42,9 @@ class CodeCommentController extends Controller
      */
     public function show(CodeComment $codeComment)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(CodeComment $codeComment)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateCodeCommentRequest $request, CodeComment $codeComment)
-    {
-        //
+        return response([
+            'comment' =>  $codeComment
+        ]);
     }
 
     /**
@@ -66,6 +52,10 @@ class CodeCommentController extends Controller
      */
     public function destroy(CodeComment $codeComment)
     {
-        //
+        $codeComment->delete();
+
+        return response([
+            'success' => "Comment deleted successfully",
+        ]);
     }
 }

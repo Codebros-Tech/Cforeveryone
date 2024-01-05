@@ -22,8 +22,7 @@ class StoreCodeCommentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required|integer',
-            'code_id' => 'required|integer',
+            'code_id' => 'required|integer|exists:codes,id',
             'comment' => 'required|string',
         ];
     }

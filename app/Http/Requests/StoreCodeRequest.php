@@ -15,7 +15,7 @@ class StoreCodeRequest extends FormRequest
     }
 
     protected function prepareForValidation() {
-        $this->merge([
+        return $this->merge([
             'user_id' => $this->user()->id
         ]);
     }

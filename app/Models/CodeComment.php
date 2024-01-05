@@ -15,6 +15,7 @@ class CodeComment extends Model
         'comment',
     ];
 
+
     public function code() {
         $this->belongsTo(Code::class);
     }
