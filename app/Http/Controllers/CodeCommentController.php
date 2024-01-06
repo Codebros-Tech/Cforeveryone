@@ -30,7 +30,11 @@ class CodeCommentController extends Controller
     {
         $data = $request->validated();
 
-        $comment = CodeComment::create($data);
+        $comment = CodeComment::create([
+            'user_id' => $request->user()->id,
+            'code_id'=> $data['code_id'],
+            'comment' => $data['comment']
+        ]);
 
         return response([
             'comment' => $comment,

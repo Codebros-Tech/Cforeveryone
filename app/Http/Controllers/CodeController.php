@@ -108,6 +108,12 @@ class CodeController extends Controller
     public function destroy(Code $code, Request $request)
     {
         if ($request->user()->id === $code->user_id) {
+
+            // delete all of the code comments before deleting the code
+            foreach ($code->comments() as $comment) {
+                $comment->delete();
+            }
+
             $code->delete();
 
             return response('Delete was successful.', 200);

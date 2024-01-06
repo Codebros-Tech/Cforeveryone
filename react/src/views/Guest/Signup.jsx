@@ -9,7 +9,7 @@ export default function Signup() {
     const { setCurrentUser, setUserToken } = useContext(StateContext);
 
     const nameRef = useRef(null);
-    const matriculeRef = useRef(null);
+    const [ matricule, setMatricule ] = useState('');
     const emailRef= useRef(null);
     const passwordRef = useRef(null);
     const passwordConfirmationRef = useRef(null);
@@ -26,7 +26,7 @@ export default function Signup() {
             image: imageData,
             name: nameRef.current.value,
             email: emailRef.current.value,
-            matricule: matriculeRef.current.value,
+            matricule: matricule,
             password: passwordRef.current.value,
             password_confirmation: passwordConfirmationRef.current.value,
         })
@@ -127,7 +127,8 @@ export default function Signup() {
                         <div className="mt-2">
                         <input
                             id="matricule"
-                            ref={matriculeRef}
+                            value={matricule}
+                            onChange={(ev) => setMatricule(ev.target.value.toUpperCase())}
                             type="text"
                             autoComplete="matricule"
                             required

@@ -21,7 +21,7 @@ export default function TButton({
         "text-xs",
         "border",
         "border-2",
-        "border-transparent"
+        "border-transparent",
     ];
 
     if (link) {
@@ -102,8 +102,8 @@ export default function TButton({
     return (
         <>
             {href && (<a href={href} className={classes.join(" ")} target={target}>{children}</a> )}
-            {to && (<Link to={to} className={classes.join(" ")}>{children}</Link> )}
-            {!to && !href && (<button onClick={onClick} className={classes.join(" ")}>{children}</button> )}
+            {to && (<Link to={to} className={classes.join(" flex justify-center ")}>{children}</Link> )}
+            {!to && !href && (<button onClick={onClick} className={classes.join(" ").concat(' flex justify-center')}>{children}</button> )}
         </>
     )
 }

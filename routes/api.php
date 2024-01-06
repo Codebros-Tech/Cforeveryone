@@ -33,10 +33,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // things related to a user.
     Route::get('/users', [HomeController::class, 'users']);
 
+    Route::apiResource('/codes/{code:id}/comments', CodeCommentController::class);
+
 });
 
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/login', [AuthController::class, 'login']);
-
-Route::apiResource('/codes/{code:id}/comments', CodeCommentController::class);
 

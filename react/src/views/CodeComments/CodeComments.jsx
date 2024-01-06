@@ -5,6 +5,8 @@ import axiosClient from "../../axios";
 import { useParams } from "react-router-dom";
 import Code from '../Code/Code'
 import Comment from '../Code/Comment'
+import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
+
 
 export default function CodeComments() {
     const { id } = useParams();
@@ -16,12 +18,14 @@ export default function CodeComments() {
 
     useEffect(() => {
         setLoading(true);
-        axiosClient.get(`/codes/${id}/comments`)
+        setInterval(() => {
+            axiosClient.get(`/codes/${id}/comments`)
             .then(({data}) => {
                 setComments(data.comments);
                 setCode(data.code);
                 setLoading(false);
             })
+        }, 5000);
     }, []);
 
     const submitComment = (ev) => {
@@ -34,6 +38,9 @@ export default function CodeComments() {
         })
         .then(({data}) => {
             console.log("Comment created", data);
+        })
+        .catch((error) => {
+            console.error("Error creating comment", error);
         })
     }
 
@@ -56,13 +63,13 @@ export default function CodeComments() {
                 <div>
                     <Code code={code} commentHide />
                     <form onSubmit={submitComment}>
-                        <div className="w-full grid grid-cols-12">
-                            <div className="col-span-11">
-                                <input type="text" ref={commentRef} className="w-full " placeholder="Type the comment here." />
+                        <div className="w-full relative">
+                            <div className="relative">
+                                <textarea ref={commentRef} className="w-full py-3 pe-14" placeholder="Type the comment here." />
                             </div>
-                            <TButton>
-                                Submit
-                            </TButton>
+                            <button type="submit" className="flex items-center border-1 bg-blue-500 text-white py-2 rounded-[30px] text-xl absolute right-0 top-[10px]  ">
+                                <PaperAirplaneIcon width={45} height={30} color="white" />
+                            </button>
                         </div>
                     </form>
                 {
