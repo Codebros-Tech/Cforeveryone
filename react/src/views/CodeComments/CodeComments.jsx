@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import Code from '../Code/Code'
 import Comment from '../Code/Comment'
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
+import { useNavigate } from 'react-router-dom'
 
 
 export default function CodeComments() {
@@ -16,15 +17,24 @@ export default function CodeComments() {
 
     const commentRef = useRef(null);
 
+    const navigate = useNavigate();
+
+
     useEffect(() => {
         setLoading(true);
-        setInterval(() => {
+        const interval =  setInterval(() => {
             axiosClient.get(`/codes/${id}/comments`)
             .then(({data}) => {
                 setComments(data.comments);
                 setCode(data.code);
                 setLoading(false);
-            })
+            }).catch((error) => {
+                // redirect the user back to the codes page if an error occured getting the comments
+                console.log(error);
+                navigate('/codes');
+            });
+
+            return () => {clearInterval(interval);}
         }, 5000);
     }, []);
 

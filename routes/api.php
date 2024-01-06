@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CodeCommentController;
 use App\Http\Controllers\CodeController;
+use App\Http\Controllers\CodeLikeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
@@ -34,6 +35,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users', [HomeController::class, 'users']);
 
     Route::apiResource('/codes/{code:id}/comments', CodeCommentController::class);
+
+    Route::get('/codes/{code:id}/likes', [CodeLikeController::class, 'getState']);
+    Route::post('/codes/{code:id}/likes', [CodeLikeController::class, 'changeState']);
 
 });
 

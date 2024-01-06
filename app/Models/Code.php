@@ -24,4 +24,12 @@ class Code extends Model
     public function comments() {
         return $this->hasMany(CodeComment::class);
     }
+
+    public function likes() {
+        return $this->hasMany(CodeLike::class);
+    }
+
+    public function likesByUser($userId) {
+        return $this->hasMany(CodeLike::class)->where('user_id', $userId);
+    }
 }

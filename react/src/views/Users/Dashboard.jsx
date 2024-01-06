@@ -1,4 +1,3 @@
-import Code from "../Code/Code";
 import PageComponent from "../../components/PageComponent";
 import TButton from "../../components/TButton";
 import { useEffect, useState } from "react";
@@ -28,32 +27,51 @@ export default function Dashboard() {
                     All My Codes
                 </TButton>
                 <TButton color='green' to="/codes">
-                    Browse Codes
+                    All Codes
                 </TButton>
             </div>
         }>
             {
                 !loading  &&
                 <div>
-                    <div className="block sm:flex sm:columns-3 max-w-7xl justify-between items-center">
-                        <div className="w-80 flex flex-col justify-center shadow-md h-[80px] mx-auto text-center text-dark font-bold">
-                            <h3>Number of Codes you Posted</h3>
-                            <h1>{dashboardInfo.codesNum}</h1>
+                    <div className="max-w-6xl grid grid-cols-2 gap-y-5 gap-x-3 sm:grid-cols-3 text-center font-bold">
+                        <div className="shadow-sm">
+                            <h3>Codes Posted</h3>
+                            <h1 className="text-[40px]">{dashboardInfo.codesNum}</h1>
                         </div>
 
-                        <div className="w-80 flex flex-col justify-center shadow-md h-[80px] mx-auto text-center text-dark font-bold">
-                            <h3>Number of Problems Solved</h3>
-                            <h1>{dashboardInfo.solutionNum}</h1>
+                        <div className="shadow-sm">
+                            <h3>Problems Solved</h3>
+                            <h1 className="text-[40px]">{dashboardInfo.solutionNum}</h1>
                         </div>
 
-                        <div className="w-80 flex flex-col  justify-center shadow-md h-[80px] mx-auto text-center text-dark font-bold">
-                            <h3>Number of People you have helped</h3>
-                            <h1>Still to work on this number:  5</h1>
+                        <div className="shadow-sm">
+                            <h3>People you helped</h3>
+                            <h1 className="text-[40px]">5</h1>
+                        </div>
+
+                        <div className="shadow-sm">
+                            <h3>Total Likes</h3>
+                            <h1 className="text-[40px]">{dashboardInfo.totalLikes}</h1>
+                        </div>
+
+                        <div className="shadow-sm">
+                            <h3>Total Points</h3>
+                            <h1 className="text-[40px]">{dashboardInfo.totalComments}</h1>
+                        </div>
+
+                        <div className="shadow-sm">
+                            <h3>Quizes Taken</h3>
+                            <h1 className="text-[40px]">{dashboardInfo.quizesTaken}</h1>
                         </div>
                     </div>
 
-                    <div className="block w-full mt-5">
-                        <Code code={{title : 'title', text: "The codes."}} />
+                    <div className="w-full mt-5 flex items-center justify-center">
+                        <div className="w-11/12 bg-white p-5">
+                            <div>
+                                <h4 className="text-[25px]">Skill path</h4>
+                            </div>
+                        </div>
                     </div>
                 </div>
             }

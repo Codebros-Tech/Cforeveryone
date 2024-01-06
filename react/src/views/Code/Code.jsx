@@ -3,16 +3,27 @@ import { useContext, useState } from 'react';
 import { StateContext } from '../../contexts/ContextProvider';
 import TButton from '../../components/TButton';
 import axiosClient from '../../axios';
+import Modal from '../../components/Modal';
+import { useNavigate } from 'react-router-dom';
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 export default function Code({code = {}, commentHide = false}) {
 
     const {currentUser , showToast} = useContext(StateContext);
     const [logState, setLogState ] = useState(false);
 
+    const [ modalState, setModalState] = useState(false);
+
+    const navigate = useNavigate();
+
+    const modalTitle  = "Delete The Code";
+    const modalText = "Are you sure you want to delete this Code? All of the comments related to this code will be deleted."
+
+
     const { deleteCodeId } = useContext(StateContext);
 
-    const likeComment = () => {
-
+    const likeComment = (id) => {
+        console.log(id);
     }
 
     const deleteCode = (id) => {
@@ -20,12 +31,18 @@ export default function Code({code = {}, commentHide = false}) {
             .then(() => {
                 deleteCodeId(id);
                 showToast('Code deleted successfully');
-                window.location.reload();
+                navigate(`/codes/`);
             })
             .catch((error) => {
                 console.error(error);
                 console.log("error occured during code deletion");
+                navigate(`/codes/`);
             })
+    }
+
+
+    if (modalState) {
+        return <Modal yesFunction={() => deleteCode(code.id)} text={modalText} title={modalTitle} />
     }
 
     return (
@@ -45,22 +62,30 @@ export default function Code({code = {}, commentHide = false}) {
                                 {
                                     code.user.email === currentUser.email &&
                                     <div className='grid grid-cols-2 gap-4 md:grid-cols-4 w-full justify-between'>
-                                        <button className="text-sm font-bold border-blue-100 border-[1px] px-2 py-2 rounded bg-blue-950 text-white" title='Copy code to clipboard text-center   '>
-                                            Copy Code.
-                                        </button>
+                                        <CopyToClipboard text={code.text} onCopy={() => {
+                                            showToast("Code has been copied to clipboard");
+                                        }}>
+                                            <button className="text-sm font-bold border-blue-100 border-[1px] px-2 py-2 rounded bg-blue-950 text-white" title='Copy code to clipboard text-center   '>
+                                                Copy Code.
+                                            </button>
+                                        </CopyToClipboard>
                                         <TButton  onClick={() => setLogState((prev) => !prev)}>
                                             {!logState ? "View Output" : "View Code"}
                                         </TButton>
                                         <TButton to={`/codes/${code.id}/edit`}>
                                             Edit
                                         </TButton>
-                                        <TButton color='red' onClick={() => deleteCode(code.id)}>
+                                        <TButton color='red' onClick={() => setModalState(true)}>
                                             Delete
                                         </TButton>
                                     </div>
                                 }
                             </div>
                         </div>
+                    </div>
+
+                    <div>
+                        <span>{code.createdAt.date}</span>
                     </div>
 
                     <div className="py-2  min-h-[150px] mt-2 overflow-x-auto">
@@ -75,7 +100,7 @@ export default function Code({code = {}, commentHide = false}) {
                     </div>
                     { !commentHide &&
                         <div className='grid grid-cols-3 pb-3 rounded-l-full gap-x-1'>
-                        <button onClick={() => likeComment(1)} className='flex py-2 bg-gray-200 items-center justify-center text-sm border-2 focus:ring-2 hover:bg-indigo-700'>
+                        <button onClick={() => likeComment(1)} className={`flex py-2 bg-gray-200 items-center justify-center text-sm border-2 focus:ring-2 hover:bg-indigo-700 ${code.like.state && 'bg-indigo-800'}`}>
                              Like
                         </button>
                         <a href={`/codes/${code.id}/comments`} className='flex py-2 bg-gray-200 items-center justify-center text-sm border-2 focus:ring-2 hover:bg-indigo-700'>

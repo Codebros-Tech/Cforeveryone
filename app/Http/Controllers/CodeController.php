@@ -110,9 +110,9 @@ class CodeController extends Controller
         if ($request->user()->id === $code->user_id) {
 
             // delete all of the code comments before deleting the code
-            foreach ($code->comments() as $comment) {
-                $comment->delete();
-            }
+            // foreach ($code->comments() as $comment) {
+            //     $comment->delete();
+            // }
 
             $code->delete();
 

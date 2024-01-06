@@ -22,7 +22,9 @@ class CodeResource extends JsonResource
             'description' => $this->description,
             'text' => $this->text,
             'errorImage' => URL::to($this->errorImage),
-            'user' => new UserResource(User::find($this->user_id))
+            'user' => new UserResource(User::find($this->user_id)),
+            'createdAt' => new \DateTime($this->createdAt),
+            'like' => $this->likesByUser($request->user()->id),
         ];
     }
 }

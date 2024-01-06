@@ -15,12 +15,16 @@ class CodeCommentController extends Controller
      */
     public function index(Code $code)
     {
-        $comments = $code->comments;
+        if ($code) {
+            $comments = $code->comments;
 
-        return response([
-            'comments' => $comments,
-            'code' => new CodeResource($code),
-        ]);
+            return response([
+                'comments' => $comments,
+                'code' => new CodeResource($code),
+            ]);
+        }
+
+        return response('Theres no code', 404);
     }
 
     /**

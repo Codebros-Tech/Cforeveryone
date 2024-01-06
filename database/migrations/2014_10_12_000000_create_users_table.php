@@ -18,8 +18,9 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('matricule')->nullable();
+            $table->integer('points')->default(0);
             $table->string('profile')->nullable();
-            $table->string('department')->nullable();   
+            $table->string('department')->nullable();
             $table->string('level')->nullable();
             $table->string('about')->nullable();
             $table->string('username')->unique()->nullable();
