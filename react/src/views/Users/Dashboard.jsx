@@ -1,12 +1,45 @@
 import PageComponent from "../../components/PageComponent";
 import TButton from "../../components/TButton";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axiosClient from '../../axios';
+import OpenAI from "openai";
+import { StateContext } from "../../contexts/ContextProvider";
+
+
 
 export default function Dashboard() {
 
     const [dashboardInfo, setDashboardInfo] = useState({});
     const [loading, setLoading] = useState(false);
+    const [choice, setChoice] = useState({});
+    const [question, setQuestion] = useState("");
+    const OPENAI_API_KEY = "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"
+    const [loadingCode, setLoadingCode] = useState(false);
+
+    const {showToast} = useContext(StateContext);
+
+    const openai = new OpenAI({
+        apiKey: OPENAI_API_KEY,
+        dangerouslyAllowBrowser: true,
+    });
+
+    async function main(text) {
+        setLoadingCode(true);
+        const completion = await openai.chat.completions.create({
+        messages: [{"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": text},
+                {"role": "system", "content": "Generate the c codes only without explanations"}],
+            model: "gpt-3.5-turbo",
+        }).catch((error) => {
+            setLoadingCode(false);
+            console.log(error);
+            showToast("You are not connected to the internet.");
+        });
+
+        console.log(completion.choices[0]);
+        setChoice(completion.choices[0])
+        setLoadingCode(false);
+    }
 
     useEffect(() => {
         setLoading(true);
@@ -67,11 +100,42 @@ export default function Dashboard() {
                     </div>
 
                     <div className="w-full mt-5 flex items-center justify-center">
-                        <div className="w-11/12 bg-white p-5">
+                        <div className="w-11/12 bg-white sm:p-5 py-5">
                             <div>
                                 <h4 className="text-[25px]">Skill path</h4>
+
+                                <div className="font-bold text-[16px]">
+                                    Your current Level
+                                </div>
+                            </div>
+
+                            <div className="flex w-full h-4 overflow-hidden font-sans text-xs font-medium rounded-full flex-start bg-blue-gray-50">
+                                <div className="flex items-center justify-center w-[80%] h-full overflow-hidden text-white break-all bg-gray-900 rounded-full ">
+                                    80% Completed
+                                </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div>
+                        <h1>My AI helper</h1>
+                        <p>Can be used to generate your code or ask any questions or worries oyou have on any subjets.</p>
+                        <div>
+                            <textarea type="text" className="w-full" value={question} onChange={(ev) => setQuestion(ev.target.value)}  />
+                            <button onClick={() => main(question)} className="p-3 bg-blue-500 text-white" disabled={loadingCode && false}>Send requests</button>
+                        </div>
+                        {
+                            !loadingCode &&
+                            <div>
+                                <textarea className="border-0 w-full mt-5 min-h-[500px]" value={choice.message &&  choice.message.content} disabled></textarea>
+                            </div>
+                        }
+                        {
+                            loadingCode &&
+                            <div className="flex items-center justify-center">
+                                Your Request is being generated
+                            </div>
+                        }
                     </div>
                 </div>
             }

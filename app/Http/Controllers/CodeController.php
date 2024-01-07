@@ -6,6 +6,7 @@ use App\Models\Code;
 use App\Http\Requests\StoreCodeRequest;
 use App\Http\Requests\UpdateCodeRequest;
 use App\Http\Resources\CodeResource;
+use App\Models\CodeLike;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -59,6 +60,20 @@ class CodeController extends Controller
         return response([
             'code' => new CodeResource($code),
         ]);
+    }
+
+    public function changeLikeState(Code $code ,Request $request) {
+        // check if any like states already exist in the database
+        if ($code->likes()->where('user_id', $request->user()->id)->first()) {
+            // fetch that like item and modify the state
+            $currentState = $code->likes()->where('user_id', $request->user()->id)->first()->state;
+            $like = $code->likes()->where('user_id', $request->user()->id)->update(['user_id' =>$request->user()->id, 'code_id' => $code->id ,'state' => !$currentState]);
+        } else {
+            // create the new state since it does not exist
+            $like = ['user_id' => $request->user()->id, 'code_id' =>$code->id, 'state' => true];
+            $like = CodeLike::create($like);
+        }
+        return response($like, 200);
     }
 
     /**

@@ -32,4 +32,8 @@ class Code extends Model
     public function likesByUser($userId) {
         return $this->hasMany(CodeLike::class)->where('user_id', $userId);
     }
+
+    public function suggestions() {
+        $this->hasMany(CodeSuggestion::class);
+    }
 }

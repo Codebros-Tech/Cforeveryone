@@ -46,7 +46,7 @@ export default function MyCodes() {
                 {
                     myCodes &&
                         myCodes.map((code, index) => (
-                            <Code key={index} code={code} />
+                            <Code key={index} thecode={code} />
                         ))
                 }
                 {

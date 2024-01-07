@@ -16,6 +16,7 @@ class CodeResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        // for each of the codes, we are going to send the number of likes of the code.
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -24,7 +25,14 @@ class CodeResource extends JsonResource
             'errorImage' => URL::to($this->errorImage),
             'user' => new UserResource(User::find($this->user_id)),
             'createdAt' => new \DateTime($this->createdAt),
-            'like' => $this->likesByUser($request->user()->id),
+            // send the number of likes of the code
+            'likes' => $this->likes()->where('state', '=', 1)->count(),
+            // send the number of comments on this code
+            'comments' => $this->comments()->count(),
+            // calculate the number of suggestions made on this code.
+            'suggestions' => 0,
+            // returns true if the current user has ligked this code.
+            'userLikeStatus' => $this->likes()->where('user_id', '=', $request->user()->id)->first(),
         ];
     }
 }

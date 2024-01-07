@@ -36,7 +36,7 @@ export default function CodeIndex() {
                 {
                     allCodes &&
                         allCodes.map((code, index) => (
-                            <Code key={index} code={code} />
+                            <Code key={index} thecode={code} />
                         ))
                 }
                 {

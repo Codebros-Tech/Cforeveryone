@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('code_id')->references('id')->on('codes');
             $table->text('description');
-            $table->longText('code');
+            $table->longText('suggestion');
             $table->timestamps();
         });
     }

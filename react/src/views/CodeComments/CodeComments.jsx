@@ -71,7 +71,7 @@ export default function CodeComments() {
             {
                 !loading  &&
                 <div>
-                    <Code code={code} commentHide />
+                    <Code thecode={code} commentHide />
                     <form onSubmit={submitComment}>
                         <div className="w-full relative">
                             <div className="relative">

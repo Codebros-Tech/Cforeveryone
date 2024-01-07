@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { StateContext } from '../../contexts/ContextProvider';
 import TButton from '../../components/TButton';
 import axiosClient from '../../axios';
@@ -7,10 +7,11 @@ import Modal from '../../components/Modal';
 import { useNavigate } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
-export default function Code({code = {}, commentHide = false}) {
+export default function Code({thecode, commentHide = false}) {
 
     const {currentUser , showToast} = useContext(StateContext);
     const [logState, setLogState ] = useState(false);
+    const [code, setCode] = useState(thecode);
 
     const [ modalState, setModalState] = useState(false);
 
@@ -19,11 +20,28 @@ export default function Code({code = {}, commentHide = false}) {
     const modalTitle  = "Delete The Code";
     const modalText = "Are you sure you want to delete this Code? All of the comments related to this code will be deleted."
 
+    useEffect(() => {
+        // going to re fetch the user data every 5 seconds
+        const interval = setInterval(() => {
+            axiosClient.get(`/codes/${code.id}`)
+                .then(({data}) => {
+                    console.log(data.code);
+                    setCode(data.code);
+                })
+        }, 4000);
+
+        return () => clearInterval(interval);
+    }, []);
 
     const { deleteCodeId } = useContext(StateContext);
 
     const likeComment = (id) => {
-        console.log(id);
+        axiosClient.post(`/codes/${id}/like`)
+            .then(() => {
+            setCode({...code, 'userLikeStatus': {...code.userLikeStatus, 'state': !code.userLikeStatus.state}});
+            }).catch((error) => {
+                console.error("Error occured liking code ", error);
+            })
     }
 
     const deleteCode = (id) => {
@@ -100,14 +118,16 @@ export default function Code({code = {}, commentHide = false}) {
                     </div>
                     { !commentHide &&
                         <div className='grid grid-cols-3 pb-3 rounded-l-full gap-x-1'>
-                        <button onClick={() => likeComment(1)} className={`flex py-2 bg-gray-200 items-center justify-center text-sm border-2 focus:ring-2 hover:bg-indigo-700 ${code.like.state && 'bg-indigo-800'}`}>
-                             Like
+                        <button onClick={() => likeComment(code.id)} className={`flex py-2 bg-gray-200 items-center justify-center text-sm border-2 focus:ring-2 hover:bg-indigo-700 ${code.userLikeStatus && code.userLikeStatus.state && 'bg-indigo-800'}`}>
+                             Like <div className='w-10 h-5 ml-2 bg-gray-400 text-center rounded-3xl'>{code.likes} </div>
                         </button>
                         <a href={`/codes/${code.id}/comments`} className='flex py-2 bg-gray-200 items-center justify-center text-sm border-2 focus:ring-2 hover:bg-indigo-700'>
                             Comments
+                            <div className='w-10 h-5 ml-2 bg-gray-400 text-center rounded-3xl'>{code.comments}</div>
                         </a>
                         <a href='/codes/id/suggestion' className='flex py-2 bg-gray-200 items-center justify-center border-2 text-sm focus:ring-2 hover:bg-indigo-700'>
                             Suggestions
+                            <div className='w-10 h-5 ml-2 bg-gray-400 text-center rounded-3xl'>{code.suggestions}</div>
                         </a>
                     </div>
                     }
@@ -118,6 +138,6 @@ export default function Code({code = {}, commentHide = false}) {
 }
 
 Code.propTypes = {
-    code: PropTypes.object,
+    thecode: PropTypes.object,
     commentHide: PropTypes.bool,
 }

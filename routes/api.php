@@ -36,8 +36,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('/codes/{code:id}/comments', CodeCommentController::class);
 
-    Route::get('/codes/{code:id}/likes', [CodeLikeController::class, 'getState']);
-    Route::post('/codes/{code:id}/likes', [CodeLikeController::class, 'changeState']);
+    Route::get('/codes/{code:id}/likes', [CodeController::class, 'getLikeState']);
+    Route::post('/codes/{code:id}/like', [CodeController::class, 'changeLikeState']);
 
 });
 

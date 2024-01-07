@@ -14,6 +14,7 @@
     "@heroicons/react": "^2.0.18",
     "@tailwindcss/forms": "^0.5.7",
     "axios": "^1.6.3",
+    "openai": "^4.24.1",
     "react": "^18.2.0",
     "react-code-blocks": "^0.1.5",
     "react-copy-to-clipboard": "^5.1.0",
