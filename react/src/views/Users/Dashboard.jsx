@@ -12,7 +12,8 @@ export default function Dashboard() {
     const [loading, setLoading] = useState(false);
     const [choice, setChoice] = useState({});
     const [question, setQuestion] = useState("");
-    const OPENAI_API_KEY = "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"
+
+    const OPENAI_API_KEY = import.meta.env.VITE_API_OPENAI_KEY;
     const [loadingCode, setLoadingCode] = useState(false);
 
     const {showToast} = useContext(StateContext);
@@ -34,7 +35,7 @@ export default function Dashboard() {
         }).catch((error) => {
             setLoadingCode(false);
             console.log(error);
-            showToast("You are not connected to the internet.");
+            showToast((JSON.stringify(error)));
         });
 
         console.log(completion.choices[0]);
