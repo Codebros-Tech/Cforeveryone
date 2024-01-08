@@ -6,6 +6,7 @@ use App\Http\Resources\CodeResource;
 use App\Models\CodeComment;
 use App\Http\Requests\StoreCodeCommentRequest;
 use App\Http\Requests\UpdateCodeCommentRequest;
+use App\Http\Resources\CommentResource;
 use App\Models\Code;
 
 class CodeCommentController extends Controller
@@ -19,7 +20,7 @@ class CodeCommentController extends Controller
             $comments = $code->comments;
 
             return response([
-                'comments' => $comments,
+                'comments' => CommentResource::collection($comments),
                 'code' => new CodeResource($code),
             ]);
         }

@@ -24,7 +24,7 @@ class CodeResource extends JsonResource
             'text' => $this->text,
             'errorImage' => URL::to($this->errorImage),
             'user' => new UserResource(User::find($this->user_id)),
-            'createdAt' => new \DateTime($this->createdAt),
+            'createdAt' => $this->created_at,
             // send the number of likes of the code
             'likes' => $this->likes()->where('state', '=', 1)->count(),
             // send the number of comments on this code

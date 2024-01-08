@@ -27,7 +27,7 @@ export default function People() {
         <PageComponent title="Find People" small="Find other people on the platform.">
             {
                 !loading &&
-                <div>
+                <div className="grid sm:grid-cols-2">
                     {
                         users &&
                             users.map((user, index) => (

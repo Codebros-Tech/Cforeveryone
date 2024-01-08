@@ -77,6 +77,8 @@ export default function DefaultLayout() {
         return <Modal yesFunction={deleteFun} text={modalText} title={modalTitle} />
     }
 
+    // default layout should have a function that will count the number of issues posted
+
     return (
         <>
             <div className='relative'>

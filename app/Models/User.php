@@ -69,4 +69,9 @@ class User extends Authenticatable
     public function likes() {
         $this->hasMany(CodeLike::class);
     }
+
+    // return all of the comments this user has ever posted
+    public function comments() {
+        return $this->hasMany(CodeComment::class);
+    }
 }

@@ -103,7 +103,7 @@ export default function Code({thecode, commentHide = false}) {
                     </div>
 
                     <div>
-                        <span>{code.createdAt.date}</span>
+                        <span>{code.createdAt}</span>
                     </div>
 
                     <div className="py-2  min-h-[150px] mt-2 overflow-x-auto">

@@ -6,7 +6,6 @@ import OpenAI from "openai";
 import { StateContext } from "../../contexts/ContextProvider";
 
 
-
 export default function Dashboard() {
 
     const [dashboardInfo, setDashboardInfo] = useState({});
@@ -25,10 +24,12 @@ export default function Dashboard() {
 
     async function main(text) {
         setLoadingCode(true);
+        // messages object is going to take in an array of objects which will contain
+        // role which can either be 'assistant', 'user', 'assistant'
         const completion = await openai.chat.completions.create({
         messages: [{"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": text},
-                {"role": "system", "content": "Generate the c codes only without explanations"}],
+                {"role": "user", "content": "Generate the C codes only without explanations"}],
             model: "gpt-3.5-turbo",
         }).catch((error) => {
             setLoadingCode(false);
@@ -122,7 +123,7 @@ export default function Dashboard() {
                         <p>Can be used to generate your code or ask any questions or worries oyou have on any subjets.</p>
                         <div>
                             <textarea type="text" className="w-full" value={question} onChange={(ev) => setQuestion(ev.target.value)}  />
-                            <button onClick={() => main(question)} className="p-3 bg-blue-500 text-white" disabled={loadingCode && false}>Send requests</button>
+                            <button onClick={() => main(question)} className="p-3 bg-blue-500 text-white" disabled={loadingCode && true}>Send requests</button>
                         </div>
                         {
                             !loadingCode &&

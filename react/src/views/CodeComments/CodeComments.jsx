@@ -84,11 +84,15 @@ export default function CodeComments() {
                     </form>
                 {
                     comments &&
-                        comments.map((comment, index) => (
-                            <div key={index}>
-                                <Comment comment={comment} />
-                            </div>
-                        ))
+                        <div className="max-w-[1200px] border-2  mx-auto px-2 py-4">
+                            {
+                                comments.map((comment, index) => (
+                                    <div key={index}>
+                                        <Comment comment={comment} />
+                                    </div>
+                                ))
+                            }
+                        </div>
                 }
                 {
                     comments.length === 0 &&
