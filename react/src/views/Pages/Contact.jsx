@@ -20,7 +20,7 @@ export default function Contact() {
 
 
                     <div className="grid grid-cols-1 mt-5 ms-2">
-                        <label htmlFor="name">Email</label>
+                        <label htmlFor="name">Suggestions for improvements of the platform</label>
                         <textarea type="text" rows={10} className="md:cols-span-1 mt-2" placeholder="Enter email here"/>
                     </div>
 

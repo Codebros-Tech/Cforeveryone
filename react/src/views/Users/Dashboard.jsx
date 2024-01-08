@@ -119,7 +119,7 @@ export default function Dashboard() {
                         </div>
                     </div>
 
-                    <div>
+                    <div className="px-4">
                         <h1>My AI helper</h1>
                         <p>Can be used to generate your code or ask any questions or worries oyou have on any subjets.</p>
                         <div>

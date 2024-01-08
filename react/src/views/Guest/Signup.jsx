@@ -9,7 +9,6 @@ export default function Signup() {
     const { setCurrentUser, setUserToken } = useContext(StateContext);
 
     const nameRef = useRef(null);
-    const [ matricule, setMatricule ] = useState('');
     const emailRef= useRef(null);
     const passwordRef = useRef(null);
     const passwordConfirmationRef = useRef(null);
@@ -26,7 +25,6 @@ export default function Signup() {
             image: imageData,
             name: nameRef.current.value,
             email: emailRef.current.value,
-            matricule: matricule,
             password: passwordRef.current.value,
             password_confirmation: passwordConfirmationRef.current.value,
         })
@@ -114,23 +112,6 @@ export default function Signup() {
                             type="text"
                             ref={nameRef}
                             autoComplete="name"
-                            required
-                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        />
-                        </div>
-                    </div>
-
-                    <div>
-                        <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                        Matricule
-                        </label>
-                        <div className="mt-2">
-                        <input
-                            id="matricule"
-                            value={matricule}
-                            onChange={(ev) => setMatricule(ev.target.value.toUpperCase())}
-                            type="text"
-                            autoComplete="matricule"
                             required
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
