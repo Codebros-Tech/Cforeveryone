@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\UserResource;
+use App\Models\Contact;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -19,5 +20,20 @@ class HomeController extends Controller
         return response([
             'users' => UserResource::collection($users),
         ]);
+    }
+
+    public function contact(Request $request) {
+        $data = $request->validate([
+            "name" => "string|required",
+            "description" => "string|required",
+        ]);
+
+        $contact = Contact::create($data);
+
+        if ($contact) {
+            return response("Contact Created", 200);
+        } else {
+            return response("Error durring creation of the contact message", 500);
+        }
     }
 }

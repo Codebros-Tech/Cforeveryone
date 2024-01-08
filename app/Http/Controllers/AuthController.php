@@ -36,7 +36,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function login(LoginRequest $request) {
+public function login(LoginRequest $request) {
         // retrieve the validated credentials
         $credentials = $request->validated();
 

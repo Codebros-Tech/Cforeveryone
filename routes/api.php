@@ -39,6 +39,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/codes/{code:id}/likes', [CodeController::class, 'getLikeState']);
     Route::post('/codes/{code:id}/like', [CodeController::class, 'changeLikeState']);
 
+    Route::post('/contact', [HomeController::class, 'contact']);
+
 });
 
 Route::post('/signup', [AuthController::class, 'signup']);

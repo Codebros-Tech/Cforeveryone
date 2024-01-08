@@ -1,7 +1,33 @@
+import { useContext, useRef } from "react";
+import axiosClient from "../../axios";
+import { StateContext } from "../../contexts/ContextProvider";
+import { useNavigate } from "react-router-dom";
+
 export default function Contact() {
+
+    const nameRef = useRef(null);
+    const descriptionRef = useRef(null);
+
+    const { showToast } = useContext(StateContext);
+
+    const navigate = useNavigate();
+
+
     const submitForm = (ev) => {
         ev.preventDefault();
         console.log('form has been submitted');
+
+        axiosClient.post('/contact', {
+            name: nameRef.current.value,
+            description: descriptionRef.current.value,
+        }).then((response) => {
+            console.log(response);
+            showToast("Thanks for you feedback");
+            navigate('/');
+        }).catch((error) => {
+            console.error(error);
+            showToast("Error: " + error.message);
+        });
     }
 
     return (
@@ -10,18 +36,12 @@ export default function Contact() {
                 <div className="py-5 px-5  w-full min-h-[500px]">
                     <div className="grid grid-cols-1 ms-2">
                         <label htmlFor="name">Name</label>
-                        <input type="text" className="md:cols-span-1 mt-2" placeholder="Enter name here"/>
+                        <input type="text" ref={nameRef} className="md:cols-span-1 mt-2" placeholder="Enter name here"/>
                     </div>
-
-                    <div className="grid grid-cols-1 mt-5 ms-2">
-                        <label htmlFor="name">Email</label>
-                        <input type="text" className="md:cols-span-1 mt-2" placeholder="Enter email here"/>
-                    </div>
-
 
                     <div className="grid grid-cols-1 mt-5 ms-2">
                         <label htmlFor="name">Suggestions for improvements of the platform</label>
-                        <textarea type="text" rows={10} className="md:cols-span-1 mt-2" placeholder="Enter email here"/>
+                        <textarea type="text" ref={descriptionRef}  rows={10} className="md:cols-span-1 mt-2" placeholder="Type the text here"/>
                     </div>
 
                     <div className="flex items-center">
