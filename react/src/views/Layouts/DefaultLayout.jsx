@@ -9,11 +9,9 @@ import Modal from '../../components/Modal'
 
 const navigation = [
   { name: 'Dashboard', to: '/dashboard'},
-  { name: 'Issues', to: '/issues'},
-  { name: "Codes", to: '/codes'},
+  { name: "Codes and Issues", to: '/codes'},
   { name: "Users", to: '/users'},
-  { name: "Team", to: '/team'},
-  { name: "Guide", to: '/guide'},
+  { name: "Contact Us", to: '/contact'},
 ]
 
 function classNames(...classes) {

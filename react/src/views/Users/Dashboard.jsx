@@ -76,11 +76,6 @@ export default function Dashboard() {
                         </div>
 
                         <div className="shadow-sm">
-                            <h3>Problems Solved</h3>
-                            <h1 className="text-[40px]">{dashboardInfo.solutionNum}</h1>
-                        </div>
-
-                        <div className="shadow-sm">
                             <h3>People you helped</h3>
                             <h1 className="text-[40px]">5</h1>
                         </div>
@@ -97,6 +92,11 @@ export default function Dashboard() {
 
                         <div className="shadow-sm">
                             <h3>Quizes Taken</h3>
+                            <h1 className="text-[40px]">{dashboardInfo.quizesTaken}</h1>
+                        </div>
+
+                        <div className="shadow-sm">
+                            <h3>Suggestions Made</h3>
                             <h1 className="text-[40px]">{dashboardInfo.quizesTaken}</h1>
                         </div>
                     </div>
