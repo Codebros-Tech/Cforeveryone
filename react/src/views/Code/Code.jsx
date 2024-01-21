@@ -25,7 +25,6 @@ export default function Code({thecode, commentHide = false}) {
         const interval = setInterval(() => {
             axiosClient.get(`/codes/${code.id}`)
                 .then(({data}) => {
-                    console.log(data.code);
                     setCode(data.code);
                 })
         }, 4000);

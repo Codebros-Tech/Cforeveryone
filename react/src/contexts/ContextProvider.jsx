@@ -1,5 +1,6 @@
-import { useState, createContext } from "react"
+import {useState, createContext, useEffect} from "react"
 import PropTypes from 'prop-types';
+import Echo from "laravel-echo";
 
 // we initialize the variables so as to make the editor able to carry out autocomplete functionality
 export const StateContext = createContext({
@@ -41,6 +42,8 @@ export const ContextProvider = ({ children }) => {
         setMyCodes(newMyCodes);
         setAllCodes(newAllCodes);
     }
+
+
 
 
     const setUserToken = (token) =>  {

@@ -2,6 +2,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,3 +28,33 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
+Route::get('/share-video', function () {
+    return "video Sharing";
+})->name('share-video');
+
+if (\Illuminate\Support\Facades\App::environment('local')) {
+    Route::get('/playground', function () {
+
+        event(new \App\Events\PlaygroundEvent());
+
+        $url = URL::temporarySignedRoute( 'share-video', now()->addSecond(30), [
+            'video' => 123
+        ]);
+
+        return $url;
+    });
+
+    Route::get('/codelaunch', function () {
+
+        event(new \App\Events\CodePushedEvent());
+
+        return null;
+    });
+
+    Route::get('/ws', function () {
+        return view('websocket');
+    });
+}
+
+

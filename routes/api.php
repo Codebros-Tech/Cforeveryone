@@ -3,7 +3,6 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CodeCommentController;
 use App\Http\Controllers\CodeController;
-use App\Http\Controllers\CodeLikeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
@@ -40,6 +39,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/codes/{code:id}/like', [CodeController::class, 'changeLikeState']);
 
     Route::post('/contact', [HomeController::class, 'contact']);
+
+    Route::get("/codelaunch", function () {
+        \App\Events\CodePushedEvent::dispatch();
+        return null;
+    });
 
 });
 

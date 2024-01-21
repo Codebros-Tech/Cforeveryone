@@ -5,7 +5,8 @@ import { Link, NavLink, Navigate, Outlet, useNavigate } from 'react-router-dom'
 import Toast from '../../components/Toast'
 import axiosClient from '../../axios'
 import { StateContext } from '../../contexts/ContextProvider'
-import Modal from '../../components/Modal'
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
 
 const navigation = [
   { name: 'Dashboard', to: '/dashboard'},
@@ -19,6 +20,38 @@ function classNames(...classes) {
 }
 
 export default function DefaultLayout() {
+
+    useEffect(() => {
+        window.Pusher = Pusher;
+
+        window.Echo = new Echo({
+            broadcaster: 'pusher',
+            key: import.meta.env.VITE_PUSHER_APP_KEY,
+            cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'mt1',
+            // wsHost: import.meta.env.VITE_PUSHER_HOST ? import.meta.env.VITE_PUSHER_HOST : `ws-${import.meta.env.VITE_PUSHER_APP_CLUSTER}.pusher.com`,
+            wsHost: window.location.hostname,
+            wsPort: import.meta.env.VITE_PUSHER_PORT ?? 80,
+            encrypted: false,
+            wssPort: import.meta.env.VITE_PUSHER_PORT ?? 443,
+            // forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
+            forceTLS: false, // only required when we are using SSL
+            enabledTransports: ['ws', 'wss'], //Only web socket connection can happen here.
+        });
+
+        var echo  = window.Echo;
+
+        echo.channel('public.code.1').subscribed(function () {
+            console.log('subscribed');
+        }).listen('.code', (event) => {
+            console.log("A code has just been pushed", event);
+        });
+
+        echo.channel('public.playground.1').listen('.playground', (event) => {
+            console.log("Change event received: ", event);
+        });
+
+    }, []);
+
     const navigate = useNavigate();
 
     const modalTitle  = "Deactivate account";
@@ -28,11 +61,13 @@ export default function DefaultLayout() {
 
     const { currentUser, setCurrentUser, userToken, setUserToken, showToast } = useContext(StateContext);
 
+
     useEffect(() => {
         axiosClient.post('/me')
             .then(({data}) => {
                 setCurrentUser(data.data);
             });
+
     }, []);
 
 

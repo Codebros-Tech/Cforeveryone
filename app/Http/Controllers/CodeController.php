@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CodePushedEvent;
+use App\Jobs\ProcessCode;
 use App\Models\Code;
 use App\Http\Requests\StoreCodeRequest;
 use App\Http\Requests\UpdateCodeRequest;
@@ -56,6 +58,13 @@ class CodeController extends Controller
             'description' => $data['description'],
             'errorImage' => $data['errorImage'],
         ]);
+
+        // we are going to fire an event indicating that a code has been pushed on location 1
+        CodePushedEvent::dispatch($code);
+
+        // dispatch the code job after creating the job
+        // send the message 1 minute after the code is posted.
+        ProcessCode::dispatch($code)->delay(now()->addMinute(1));
 
         return response([
             'code' => new CodeResource($code),
