@@ -4,6 +4,7 @@ import TButton from "../../components/TButton";
 import { useContext, useEffect, useState } from "react";
 import axiosClient from "../../axios";
 import { StateContext } from "../../contexts/ContextProvider";
+import echo from '../../echo.js'
 
 export default function CodeIndex() {
     const [loading, setLoading ] = useState(false);
@@ -19,8 +20,24 @@ export default function CodeIndex() {
             })
     }, []);
 
+    echo.channel('public.code').listen('.code', (event) => {
+        if (event.id) {
+            const newCodes = allCodes.filter(code => code.id !== event.id);
+            setAllCodes(newCodes);
+        } else if (event.code) {
+            allCodes.map((code) => {
+                if (code.id === event.code.id) {
+                    return event.code;
+                }
+                return code;
+            })
+            setAllCodes([...allCodes, event.code]);
+        }
+    });
+
+
     return (
-        <PageComponent title="All Codes" buttons={
+        <PageComponent title="All Codes" buttons={(
             <div className='flex gap-2'>
                 <TButton color='green' to="/codes/create">
                     New
@@ -29,7 +46,7 @@ export default function CodeIndex() {
                     My Codes.
                 </TButton>
             </div>
-        }>
+        )}>
             {
                 !loading  &&
                 <div>

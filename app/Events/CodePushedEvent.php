@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Http\Resources\CodeResource;
 use App\Models\Code;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -22,10 +23,12 @@ class CodePushedEvent implements ShouldBroadcast
      */
 
     private Code $code;
+    public String $action;
 
-    public function __construct()
+    public function __construct($code, $action)
     {
-//        $this->code = $code;
+        $this->code = $code;
+        $this->action = $action;
     }
 
     /**
@@ -35,11 +38,8 @@ class CodePushedEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-//        return [
-//            new Channel('public_code'),
-//        ];
 
-        return new Channel('public.code.1');
+        return new Channel('public.code');
     }
 
     public function broadcastAs()
@@ -49,8 +49,14 @@ class CodePushedEvent implements ShouldBroadcast
 
     public function broadcastWith()
     {
-        return [
-            'hello' => 'Nothing interesting'
-        ];
+        return match ($this->action) {
+            'pushed' => [
+                'code' => new CodeResource($this->code),
+            ],
+            'deleted' =>  [
+                'id' => $this->code->id,
+            ],
+            default => [],
+        };
     }
 }

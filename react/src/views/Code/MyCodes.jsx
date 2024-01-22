@@ -4,6 +4,7 @@ import TButton from "../../components/TButton";
 import { useContext, useEffect, useState } from "react";
 import axiosClient from "../../axios";
 import { StateContext } from "../../contexts/ContextProvider";
+import echo from "../../echo.js";
 
 export default function MyCodes() {
     const [loading, setLoading] = useState(false);
@@ -23,8 +24,24 @@ export default function MyCodes() {
     }, []);
 
 
+    echo.channel('public.code').listen('.code', (event) => {
+        if (event.id) {
+            myCodes.filter(code => code.id === event.id);
+            setMyCodes(myCodes);
+        } else if (event.code) {
+            myCodes.map((code) => {
+                if (code.id === event.code.id) {
+                    return event.code;
+                }
+                return code;
+            })
+            setMyCodes([...myCodes, event.code]);
+        }
+    });
+
+
     return (
-        <PageComponent title="My Codes" buttons={
+        <PageComponent title="My Codes" buttons={(
             <div className='flex gap-2'>
                 <TButton color='green' to="/codes/create">
                     New
@@ -33,7 +50,7 @@ export default function MyCodes() {
                     All Codes
                 </TButton>
             </div>
-        }>
+        )}>
             {
                 loading &&
                     <div className="flex items-center justify-center">

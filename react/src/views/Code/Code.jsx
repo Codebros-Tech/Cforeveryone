@@ -20,18 +20,6 @@ export default function Code({thecode, commentHide = false}) {
     const modalTitle  = "Delete The Code";
     const modalText = "Are you sure you want to delete this Code? All of the comments related to this code will be deleted."
 
-    useEffect(() => {
-        // going to re fetch the user data every 5 seconds
-        const interval = setInterval(() => {
-            axiosClient.get(`/codes/${code.id}`)
-                .then(({data}) => {
-                    setCode(data.code);
-                })
-        }, 4000);
-
-        return () => clearInterval(interval);
-    }, []);
-
     const { deleteCodeId } = useContext(StateContext);
 
     const likeComment = (id) => {

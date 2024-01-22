@@ -56,7 +56,7 @@ export default function Dashboard() {
     }, []);
 
     return (
-        <PageComponent title="Dashboard"  buttons={
+        <PageComponent title="Dashboard"  buttons={(
             <div className='flex gap-2'>
                 <TButton color='green' to="/codes/mycodes">
                     All My Codes
@@ -64,8 +64,11 @@ export default function Dashboard() {
                 <TButton color='green' to="/codes">
                     All Codes
                 </TButton>
+                <TButton color='green' to="/codes/create">
+                    New
+                </TButton>
             </div>
-        }>
+        )}>
             {
                 !loading  &&
                 <div>

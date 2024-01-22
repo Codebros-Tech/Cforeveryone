@@ -40,10 +40,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/contact', [HomeController::class, 'contact']);
 
-    Route::get("/codelaunch", function () {
-        \App\Events\CodePushedEvent::dispatch();
-        return null;
-    });
 
 });
 

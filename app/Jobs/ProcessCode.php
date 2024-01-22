@@ -45,7 +45,7 @@ class ProcessCode implements ShouldQueue, ShouldBeUnique, ShouldBeEncrypted
     {
         // notify the other users that i have posted via email.
         // get the corresponding user info
-        $user = $this->code->user();
-        Mail::to($user->email)->send(new WelcomeMessage($code));
+//        $user = $this->code->user();
+//        Mail::to($user->email)->send(new WelcomeMessage($code));
     }
 }

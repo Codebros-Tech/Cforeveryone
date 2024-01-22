@@ -74,4 +74,8 @@ class User extends Authenticatable
     public function comments() {
         return $this->hasMany(CodeComment::class);
     }
+
+    public function codes() {
+        return $this->hasMany(Code::class);
+    }
 }

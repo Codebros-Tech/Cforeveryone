@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CodeDeletedEvent;
 use App\Events\CodePushedEvent;
 use App\Jobs\ProcessCode;
 use App\Models\Code;
@@ -59,15 +60,10 @@ class CodeController extends Controller
             'errorImage' => $data['errorImage'],
         ]);
 
-        // we are going to fire an event indicating that a code has been pushed on location 1
-        CodePushedEvent::dispatch($code);
-
-        // dispatch the code job after creating the job
-        // send the message 1 minute after the code is posted.
-        ProcessCode::dispatch($code)->delay(now()->addMinute(1));
+        CodePushedEvent::dispatch($code, 'pushed');
 
         return response([
-            'code' => new CodeResource($code),
+            'status' => 'Code Stored'
         ]);
     }
 
@@ -104,7 +100,7 @@ class CodeController extends Controller
 
         // make sure you can only update a code which you posted
         if ($request->user()->id !== $code->user_id) {
-            return abort(403, "Unauthorized Action");
+            return response("Unauthorized Action", 403);
         }
 
         // delete the old image if it exists
@@ -113,12 +109,16 @@ class CodeController extends Controller
             File::delete($absolutePath);
         }
 
+        CodePushedEvent::dispatch($code, 'pushed');
+
 
         // replace the image
         if (isset($updatedCode['errorImage'])) {
             $relativePath = $this->saveImage($updatedCode['errorImage'], 'images/codeLogs/');
             $updatedCode['errorImage'] = $relativePath;
         }
+
+        CodePushedEvent::dispatch($code);
 
 
         $code->update($updatedCode);
@@ -133,17 +133,18 @@ class CodeController extends Controller
     {
         if ($request->user()->id === $code->user_id) {
 
-            // delete all of the code comments before deleting the code
-            // foreach ($code->comments() as $comment) {
-            //     $comment->delete();
-            // }
+             foreach ($code->comments() as $comment) {
+                 $comment->delete();
+             }
 
-            $code->delete();
+             $code->delete();
+
+             CodePushedEvent::dispatch($code, 'deleted');
 
             return response('Delete was successful.', 200);
         }
 
-        return abort(403, "Unauthorized Action");
+        return response("Unauthorized Action", 403);
     }
 
 

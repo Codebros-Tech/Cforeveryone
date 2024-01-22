@@ -18,8 +18,8 @@ class Code extends Model
         'user_id'
     ];
 
-    public function user(): BelongsTo {
-        $this->belongsTo(User::class, 'user_id');
+    public function user() {
+        $this->belongsTo(User::class);
     }
 
     public function comments() {

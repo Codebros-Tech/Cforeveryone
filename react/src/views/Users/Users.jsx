@@ -14,7 +14,6 @@ export default function People() {
         axiosClient.get('/users')
         .then(({data}) => {
             setUsers(data.users);
-            console.log(data);
             setLoading(false);
         })
         .catch((error) => {
