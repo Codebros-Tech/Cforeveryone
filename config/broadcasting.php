@@ -29,7 +29,7 @@ return [
     */
 
     'connections' => [
-
+        // setting up the pusher from the server side.
         'pusher' => [
             'driver' => 'pusher',
             'key' => env('PUSHER_APP_KEY'),

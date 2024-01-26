@@ -24,7 +24,7 @@ export default function MyCodes() {
     }, []);
 
 
-    echo.channel('public.code').listen('.code', (event) => {
+    echo.channel('private.codes').listen('.codes', (event) => {
         if (event.id) {
             myCodes.filter(code => code.id === event.id);
             setMyCodes(myCodes);

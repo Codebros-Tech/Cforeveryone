@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Broadcast;
+use App\Models\Code;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,3 +21,7 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
+//Broadcast::channel('private.codes.{codeId}', function (User $user, int $codeId) {
+//    // first parammeters for this callback is the currently authenticated user.
+////    return $user->id === Code::findOrNew($codeId)->user_id;
+//});

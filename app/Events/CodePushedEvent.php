@@ -6,7 +6,6 @@ use App\Http\Resources\CodeResource;
 use App\Models\Code;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -34,20 +33,22 @@ class CodePushedEvent implements ShouldBroadcast
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return Channel
+     * @return array
      */
-    public function broadcastOn()
+    public function broadcastOn(): array
     {
 
-        return new Channel('public.code');
+        return [
+            new PrivateChannel('private.codes'),
+        ];
     }
 
-    public function broadcastAs()
+    public function broadcastAs(): string
     {
-        return 'code';
+        return 'codes';
     }
 
-    public function broadcastWith()
+    public function broadcastWith(): array
     {
         return match ($this->action) {
             'pushed' => [

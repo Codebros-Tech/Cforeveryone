@@ -20,7 +20,7 @@ export default function CodeIndex() {
             })
     }, []);
 
-    echo.channel('public.code').listen('.code', (event) => {
+    echo.private('private.codes').listen('.codes', (event) => {
         if (event.id) {
             const newCodes = allCodes.filter(code => code.id !== event.id);
             setAllCodes(newCodes);

@@ -68,7 +68,8 @@ class CodeController extends Controller
     }
 
     public function changeLikeState(Code $code ,Request $request) {
-        // check if any like states already exist in the database
+        // check if any like states already exiy
+        //st in the database
         if ($code->likes()->where('user_id', $request->user()->id)->first()) {
             // fetch that like item and modify the state
             $currentState = $code->likes()->where('user_id', $request->user()->id)->first()->state;

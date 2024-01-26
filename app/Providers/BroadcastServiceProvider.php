@@ -12,7 +12,7 @@ class BroadcastServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Broadcast::routes(); // register the authenfication route for presence and private channels.
+        Broadcast::routes();
 
         require base_path('routes/channels.php');
     }
