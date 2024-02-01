@@ -15,13 +15,12 @@ use App\Models\User;
 |
 */
 
-// first argument of the callback function is the instance of the currently logged in user.
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
-    // determine whether the currently authenticated user can subscribe to this channel or not.
     return (int) $user->id === (int) $id;
+    // in the case of presence channel, we will return but the user information.
 });
 
-//Broadcast::channel('private.codes.{codeId}', function (User $user, int $codeId) {
-//    // first parammeters for this callback is the currently authenticated user.
-////    return $user->id === Code::findOrNew($codeId)->user_id;
-//});
+Broadcast::channel('private.chat.{id}', function ($user, $id) {
+    // this means the currently logged in user is always allowed to join the channel.
+    return true;
+});

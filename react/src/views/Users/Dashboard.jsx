@@ -5,7 +5,6 @@ import axiosClient from '../../axios';
 import OpenAI from "openai";
 import { StateContext } from "../../contexts/ContextProvider";
 
-
 export default function Dashboard() {
 
     const [dashboardInfo, setDashboardInfo] = useState({});

@@ -2,7 +2,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\URL;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +26,11 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+});
+
+Route::get('/chat', function () {
+    event(new \App\Events\ChatMessageEvent());
+    return "chat message";
 });
 
 Route::get('/share-video', function () {

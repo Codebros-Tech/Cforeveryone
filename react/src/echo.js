@@ -1,27 +1,12 @@
 import Pusher from "pusher-js";
 import Echo from "laravel-echo";
-import axiosClient from "./axios.js";
 
 window.Pusher = Pusher;
 
 // prepared an event class setup and exported it via echo.
 window.Echo = new Echo({
-    authorizer: (channel, callback) => {
-        return {
-            authorize: (socketId, callback) => {
-                axiosClient.post('/api/broadcasting/auth', {
-                    socket_id: socketId,
-                    channel_name: channel,
-                })
-                    .then(response => {
-                        callback(null, response.data);
-                    })
-                    .catch(error => {
-                        callback(error);
-                    });
-            }
-        }
-    },
+    auth: {},
+    authEndpoint: "http://localhost:8000/broadcasting/auth",
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_APP_KEY,
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'mt1',

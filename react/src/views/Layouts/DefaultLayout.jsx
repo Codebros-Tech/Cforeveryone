@@ -5,9 +5,8 @@ import { Link, NavLink, Navigate, Outlet, useNavigate } from 'react-router-dom'
 import Toast from '../../components/Toast'
 import axiosClient from '../../axios'
 import { StateContext } from '../../contexts/ContextProvider'
-import Echo from 'laravel-echo';
-import Pusher from 'pusher-js';
-import Modal from "../../components/Modal.jsx";
+import Modal from "../../components/Modal.jsx"
+import echo from '../../echo.js'
 
 const navigation = [
   { name: 'Dashboard', to: '/dashboard'},
@@ -22,9 +21,13 @@ function classNames(...classes) {
 
 export default function DefaultLayout() {
 
-    useEffect(() => {
+    const chatChannel = echo.private('private.chat.1');
 
-    }, []);
+    chatChannel.subscribed(() => {
+        console.log("subscribed to the chat channel");
+    }).listen('.chat', (ev) => {
+        console.log(ev);
+    });
 
     const navigate = useNavigate();
 
