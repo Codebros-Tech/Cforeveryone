@@ -49,7 +49,7 @@ export default function CodeIndex() {
         )}>
             {
                 !loading  &&
-                <div>
+                <div className={"md:flex gap-2"}>
                 {
                     allCodes &&
                         allCodes.map((code, index) => (
