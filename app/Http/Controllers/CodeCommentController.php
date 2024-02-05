@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CodeCommentPushed;
 use App\Http\Resources\CodeResource;
 use App\Models\CodeComment;
 use App\Http\Requests\StoreCodeCommentRequest;
@@ -31,7 +32,7 @@ class CodeCommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCodeCommentRequest $request)
+    public function store(StoreCodeCommentRequest $request): bool
     {
         $data = $request->validated();
 
@@ -41,9 +42,9 @@ class CodeCommentController extends Controller
             'comment' => $data['comment']
         ]);
 
-        return response([
-            'comment' => $comment,
-        ]);
+        CodeCommentPushed::dispatch($comment);
+
+        return true;
     }
 
     /**

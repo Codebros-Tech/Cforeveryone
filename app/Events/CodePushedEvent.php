@@ -24,7 +24,7 @@ class CodePushedEvent implements ShouldBroadcast
     private Code $code;
     public String $action;
 
-    public function __construct($code, $action)
+    public function __construct($code, String $action)
     {
         $this->code = $code;
         $this->action = $action;
@@ -39,7 +39,7 @@ class CodePushedEvent implements ShouldBroadcast
     {
 
         return [
-            new PrivateChannel('private.codes'),
+            new PrivateChannel('private.codes.'.$this->code->id),
         ];
     }
 

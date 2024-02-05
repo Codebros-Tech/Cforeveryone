@@ -14,7 +14,7 @@ return [
     */
 
     // setting this to queue connection the 'sync' means every job is being process directly rather than being added to some kind of queue.
-    'default' => env('QUEUE_CONNECTION', 'sync'),
+    'default' => env('QUEUE_CONNECTION', 'database'),
 
     /*
     |--------------------------------------------------------------------------

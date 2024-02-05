@@ -3,6 +3,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Models\Code;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,5 +38,3 @@ Route::get('/chat', function () {
 Route::get('/share-video', function () {
     return "video Sharing";
 })->name('share-video');
-
-

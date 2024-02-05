@@ -20,7 +20,7 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     // in the case of presence channel, we will return but the user information.
 });
 
-Broadcast::channel('private.chat.{id}', function ($user, $id) {
+Broadcast::channel('private.chat.{id}', function (User $user, $id) {
     // this means the currently logged in user is always allowed to join the channel.
     return true;
 });

@@ -10,9 +10,13 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ChatMessageEvent
+use App\Models\User;
+
+class ServerCreated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    public User $user;
 
     /**
      * Create a new event instance.
@@ -29,19 +33,24 @@ class ChatMessageEvent
      */
     public function broadcastOn(): array
     {
-        // deciding on whether the channel is going to private, public or present is choosen by the event class
+        // private channel is created on user.id where id is variable.
         return [
-//            new PrivateChannel('private.chat.1'),
+            new PrivateChannel('user.'.$this->user->id),
         ];
     }
 
-    public function broadcastAs() {
-        return 'chat-message';
+    public function broadcastAs(): string {
+        return 'server.created';
     }
 
-    public function broadcastWith() {
+    // broadcastWith will automatically broadcast all of the public variables on the channel.
+    public function broadcastWith(): array {
         return [
-            'message'=> "Hello to this world of mine",
+            'id' => $this->user->id,
         ];
+    }
+
+    public function broadcastWhen(): bool {
+        return $this->user->salary >  100;
     }
 }

@@ -7,6 +7,7 @@ import Code from '../Code/Code'
 import Comment from '../Code/Comment'
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
 import { useNavigate } from 'react-router-dom'
+import echo from "../../echo.js";
 
 
 export default function CodeComments() {
@@ -22,21 +23,30 @@ export default function CodeComments() {
 
     useEffect(() => {
         setLoading(true);
-        const interval =  setInterval(() => {
-            axiosClient.get(`/codes/${id}/comments`)
-            .then(({data}) => {
-                setComments(data.comments);
-                setCode(data.code);
-                setLoading(false);
-            }).catch((error) => {
-                // redirect the user back to the codes page if an error occured getting the comments
-                console.log(error);
-                navigate('/codes');
-            });
+        // this fetches all the comments for this post first .
+        axiosClient.get(`/codes/${id}/comments`)
+        .then(({data}) => {
+            setComments(data.comments);
+            setCode(data.code);
+            setLoading(false);
+        }).catch((error) => {
+            // redirect the user back to the codes page if an error occured getting the comments
+            console.log(error);
+            navigate('/codes');
+        });
 
-            return () => {clearInterval(interval);}
-        }, 5000);
     }, []);
+
+    // this part will keep track of the changes in the comments.
+    const commentChannel = echo.channel('public.code.'+id);
+    commentChannel.subscribed(function() {
+        console.log("Subscribed to the comment channel");
+    })
+        .listen('.comment', (event) => {
+            comments.push(event.comment);
+            setComments([...comments, event.comment]);
+        });
+
 
     const submitComment = (ev) => {
         ev.preventDefault();
@@ -45,17 +55,11 @@ export default function CodeComments() {
         axiosClient.post(`/codes/${id}/comments`, {
             code_id: code.id,
             comment: comment,
-        })
-        .then(({data}) => {
-            console.log("Comment created", data);
-        })
-        .catch((error) => {
-            console.error("Error creating comment", error);
-        })
+        });
     }
 
     return (
-        <PageComponent title={code.title ?? "Code has no title"} buttons={
+        <PageComponent title={code.title ?? "Code has no title"} buttons={(
             <div className='flex gap-2'>
                 <TButton color='green' to="/codes/create">
                     New
@@ -64,6 +68,7 @@ export default function CodeComments() {
                     My Codes.
                 </TButton>
             </div>
+        )
         }
         small={`Code Description ${code.description}`}
         >

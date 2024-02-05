@@ -52,46 +52,46 @@ export default function Code({thecode, commentHide = false}) {
 
     return (
         <motion.div
-            className="flex w-fit border-b-2 border-2"
+            className="flex rounded w-full mt-3"
             initial={{
                 scale: 0,
                 opacity: 0,
                 rotate: "0deg"
             }}
-           animate={{
-               opacity: 1,
-               scale: 1,
-           }}
             transition={{
                 duration: 1,
                 type: "spring",
             }}
+            whileInView={{
+                scale: 1,
+                opacity: 1
+            }}
         >
             {
                 code && code.user &&
-                <div className={"ps-2"}>
+                <div className={"px-2 bg-black text-gray-500 w-full md:w-11/12"}>
                     <div>
-                        <div className='flex gap-2 columns-2 items-center'>
-                            <div>
+                        <div className={"flex justify-between"}>
+                            <span>{code.user.name}</span>
+                            <span
+                                className={"font-thin text-[14px] hover:text-[17px] delay-500"}>{code.createdAt}</span>
+                            {
+                                code.user.profile !== 'http://localhost:8000' &&
                                 <img className="h-[30px] w-auto rounded-full" src={code.user.profile} alt=""/>
-                                <span>{code.user.name}</span>
-                            </div>
-                            <div>
-                                <span>{code.createdAt}</span>
-                            </div>
+                            }
                         </div>
                         <div className='flex flex-col justify-between'>
-                        <h3 className="font-semibold sm:text-lg">{code.title}</h3>
+                            <h3 className="font-semibold sm:text-lg">{code.title}</h3>
                             <p>{code.description}</p>
                             <div className='ms-auto'>
                                 {
                                     code.user.email === currentUser.email &&
-                                    <div className='flex gap-1'>
-                                        <button onClick={() => setLogState((prev) => !prev)}>
-                                            {!logState ? "View Output" : "View Code"}
+                                    <div className='flex gap-x-4'>
+                                        <button title={"Click to toggle between the code and the output"} onClick={() => setLogState((prev) => !prev)}>
+                                            {!logState ? "Output" : "Code"}
                                         </button>
                                         <a href={`/codes/${code.id}`}>Edit</a>
-                                        <button onClick={() => setModalState(true)}>
+                                        <button className={"text-red-700 hover:text-red-900"} onClick={() => setModalState(true)}>
                                             Delete
                                         </button>
                                     </div>
@@ -111,25 +111,23 @@ export default function Code({thecode, commentHide = false}) {
                     >
                         {
                             !logState &&
-                            <textarea className="w-full relative overflow-auto" defaultValue={code.text} disabled />
+                            <motion.textarea initial={{ opacity: 1, scale: 1}} transition={{ duration: 2}} exit={{ opacity: 0, scale: 0}} className="w-full bg-gray-800 text-white min-h-[200px] relative overflow-auto" defaultValue={code.text} disabled />
                         }
                         {
-                            logState &&
-                                <img className='w-80' alt={"The code error image."} src={code.errorImage} />
+                            logState && code.errorImage !== 'http://localhost:8000' &&
+                            <motion.img initial={{ scale: 0}} animate={{scale: 1}} transition={{ duration: 1}} className='w-80' alt={"The code error image."} src={code.errorImage}/>
                         }
                     </motion.div>
-                    { !commentHide &&
-                        <div className='grid grid-cols-3  gap-x-1'>
-                            <button onClick={() => likeComment(code.id)} className={`flex py-2 bg-gray-200 items-center justify-center text-sm border-2 focus:ring-2 hover:bg-indigo-700 ${code.userLikeStatus && code.userLikeStatus.state && 'bg-indigo-800'}`}>
-                                 Like <div className='w-10 h-5 ml-2 bg-gray-400 text-center rounded-3xl'>{code.likes} </div>
+                    {!commentHide &&
+                        <div className={"flex pt-2 font-thin gap-x-2 text-gray-100 "}>
+                            <button className={" px-4 bg-gray-800"} onClick={() => likeComment(code.id)}>
+                                 Like <span className={"text-[14px] "}>{code.likes} </span>
                             </button>
-                            <a href={`/codes/${code.id}/comments`} className='flex py-2 bg-gray-200 items-center justify-center text-sm border-2 focus:ring-2 hover:bg-indigo-700'>
-                                Comments
-                                <div className='w-10 h-5 ml-2 bg-gray-400 text-center rounded-3xl'>{code.comments}</div>
+                            <a href={`/codes/${code.id}/comments`} className='flex'>
+                                Comment
                             </a>
-                            <a href='/codes/id/suggestion' className='flex py-2 bg-gray-200 items-center justify-center border-2 text-sm focus:ring-2 hover:bg-indigo-700'>
-                                Suggestions
-                                <div className='w-10 h-5 ml-2 bg-gray-400 text-center rounded-3xl'>{code.suggestions}</div>
+                            <a href='/codes/id/suggestion'>
+                                Suggest
                             </a>
                         </div>
                     }
