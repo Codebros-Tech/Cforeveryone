@@ -2,6 +2,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 use App\Models\Code;
 
@@ -38,3 +39,13 @@ Route::get('/chat', function () {
 Route::get('/share-video', function () {
     return "video Sharing";
 })->name('share-video');
+
+
+Route::get('/server-created', function (Request $request) {
+    \App\Events\ServerCreated::dispatch($request->user());
+});
+
+Route::get('/newmessage', function () {
+    broadcast(\App\Events\NewMessageEvent::class);
+    return null;
+});

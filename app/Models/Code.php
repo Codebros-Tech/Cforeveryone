@@ -8,9 +8,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @method static create(array $array)
+ */
 class Code extends Model
 {
-    use HasFactory;
+    use BroadcastsEvents ,HasFactory;
 
     protected $fillable = [
         'title',

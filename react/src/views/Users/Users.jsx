@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
-import axiosClient from "../../axios";
-import PageComponent from "../../components/PageComponent";
-import User from "./User";
+import { useEffect, useState } from "react"
+import axiosClient from "../../axios"
+import PageComponent from "../../components/PageComponent"
+import User from "./User"
+import echo from '../../echo.js'
 
 export default function People() {
     const [users , setUsers] = useState([]);
@@ -10,7 +11,6 @@ export default function People() {
 
     useEffect(() => {
         setLoading(true);
-        // fetch all of the users
         axiosClient.get('/users')
         .then(({data}) => {
             setUsers(data.users);
@@ -21,6 +21,14 @@ export default function People() {
         });
 
     }, [])
+
+    echo.private('private.server')
+        .subscribed(() => {
+            console.log('subscribed to ');
+        })
+        .listen('.server.created', (event) => {
+            console.log(event);
+        });
 
     return (
         <PageComponent title="Find People" small="Find other people on the platform.">

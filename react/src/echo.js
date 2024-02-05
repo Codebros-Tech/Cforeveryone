@@ -1,31 +1,49 @@
 import Pusher from "pusher-js";
 import Echo from "laravel-echo";
-import axiosClient from "./axios.js";
+import axios from 'axios'
 
 window.Pusher = Pusher;
 
+const token = `Bearer ${localStorage.getItem('TOKEN')}`;
+// const key  = `${import.meta.env.VITE_APP_KEY}`;
+const key = `${import.meta.env.VITE_PUSHER_APP_KEY}`;
+const baseUrl = 'http://localhost:8000';
+
 // prepared an event class setup and exported it via echo.
 window.Echo = new Echo({
-    // authorize: (channel, options) => {
-    //     return {
-    //         authorize: (socketId, callback) => {
-    //             axiosClient.post('/broadcasting/auth', {
-    //                 socketId: socketId,
-    //                 channel_name: channel.name,
-    //             })
-    //                 .then(response => {
-    //                     callback(null, response.data);
-    //                 })
-    //                 .catch(error => {
-    //                     callback(error);
-    //                 });
-    //         }
-    //     }
-    // },
-    // auth: localStorage.getItem('TOKEN'),
-    authEndpoint: "http://localhost:8000/broadcasting/auth",
+    authorizer: (channel, options) => {
+        return {
+            authorize: (socketId, callback) => {
+                axios.post('http://localhost:8000/broadcasting/auth', {
+                    socket_id: socketId,
+                    channel_name: channel.name
+                }, {
+                    headers: {
+                        Authorization: token,
+                        // "Content-Type: "application/json"
+                    }
+                })
+                    .then(response => {
+                        callback(null, response.data);
+                    })
+                    .catch(error => {
+                        callback(error);
+                    });
+            }
+        };
+    },
+    authEndpoint: `${baseUrl}/broadcasting/auth`,
+    auth: {
+        headers: {
+            'Authorization': token,
+            // 'X-CSRF-Token': key,
+            'common': {
+                'X-Requested-With': 'XMLHttpRequest',
+            }
+        }
+    },
     broadcaster: 'pusher',
-    key: import.meta.env.VITE_PUSHER_APP_KEY,
+    key: key,
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'mt1',
     // wsHost: import.meta.env.VITE_PUSHER_HOST ? import.meta.env.VITE_PUSHER_HOST : `ws-${import.meta.env.VITE_PUSHER_APP_CLUSTER}.pusher.com`,
     wsHost: window.location.hostname,

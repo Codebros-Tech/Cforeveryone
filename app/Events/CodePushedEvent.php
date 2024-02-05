@@ -21,10 +21,11 @@ class CodePushedEvent implements ShouldBroadcast
      * Create a new event instance.
      */
 
-    private Code $code;
+    public Code $code;
+
     public String $action;
 
-    public function __construct($code, String $action)
+    public function __construct($code, $action)
     {
         $this->code = $code;
         $this->action = $action;
@@ -39,7 +40,8 @@ class CodePushedEvent implements ShouldBroadcast
     {
 
         return [
-            new PrivateChannel('private.codes.'.$this->code->id),
+            // broadcasting the event on the 'codes' private channel.
+            new PrivateChannel('codes'),
         ];
     }
 
@@ -50,14 +52,17 @@ class CodePushedEvent implements ShouldBroadcast
 
     public function broadcastWith(): array
     {
-        return match ($this->action) {
-            'pushed' => [
-                'code' => new CodeResource($this->code),
-            ],
-            'deleted' =>  [
-                'id' => $this->code->id,
-            ],
-            default => [],
-        };
+//        return match ($this->action) {
+//            'pushed' =>  [
+//                'code' => new CodeResource($this->code),
+//            ],
+//            'deleted' =>  [
+//                'id' => $this->code->id,
+//            ],
+//            default => [],
+//        };
+        return [
+            'code' => new CodeResource($this->code),
+        ];
     }
 }

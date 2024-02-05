@@ -11,6 +11,7 @@ use App\Http\Requests\UpdateCodeRequest;
 use App\Http\Resources\CodeResource;
 use App\Models\CodeLike;
 use App\Models\User;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -42,6 +43,7 @@ class CodeController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * @throws \Exception
      */
     public function store(StoreCodeRequest $request)
     {
@@ -68,7 +70,7 @@ class CodeController extends Controller
     }
 
     public function changeLikeState(Code $code ,Request $request) {
-        // check if any like states already exiy
+        // check if any like states already exist
         //st in the database
         if ($code->likes()->where('user_id', $request->user()->id)->first()) {
             // fetch that like item and modify the state

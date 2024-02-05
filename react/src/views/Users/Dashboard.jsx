@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import axiosClient from '../../axios';
 import OpenAI from "openai";
 import { StateContext } from "../../contexts/ContextProvider";
+import echo from '../../echo.js';
 
 export default function Dashboard() {
 
@@ -53,6 +54,24 @@ export default function Dashboard() {
                 console.error(error);
             })
     }, []);
+
+    echo.join('chat.1')
+        .here((users) => {
+            // contains information about all the users connected to this channel
+            console.log(users);
+        })
+        .joining((user) => {
+            // initiated when a new user joins the channel
+            console.log(user.name, ' Joined the channel');
+        })
+        .leaving((user) => {
+            //  initiated when a user leaves the channel
+            console.log(user.name);
+        })
+        .error((error) => {
+            // contains any error that happens in communication
+            console.error(error);
+        });
 
     return (
         <PageComponent title="Dashboard"  buttons={(

@@ -31,7 +31,7 @@ class ChatMessageEvent
     {
         // deciding on whether the channel is going to private, public or present is choosen by the event class
         return [
-//            new PrivateChannel('private.chat.1'),
+            new PrivateChannel('private.chat.1'),
         ];
     }
 

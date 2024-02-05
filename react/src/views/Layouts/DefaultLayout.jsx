@@ -21,14 +21,6 @@ function classNames(...classes) {
 
 export default function DefaultLayout() {
 
-    const chatChannel = echo.private('private.chat.1');
-
-    chatChannel.subscribed(() => {
-        console.log("subscribed to the chat channel");
-    }).listen('.chat', (ev) => {
-        console.log(ev);
-    });
-
     const navigate = useNavigate();
 
     const modalTitle  = "Deactivate account";

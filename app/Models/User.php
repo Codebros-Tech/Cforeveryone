@@ -78,4 +78,11 @@ class User extends Authenticatable
     public function codes() {
         return $this->hasMany(Code::class);
     }
+
+    public function canJoinRoom($roomId): bool
+    {
+        return true;
+    }
+
+
 }
