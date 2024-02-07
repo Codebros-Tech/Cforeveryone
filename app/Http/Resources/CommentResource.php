@@ -21,8 +21,7 @@ class CommentResource extends JsonResource
         // and lastly the comment text
         return [
             'user' => new UserResource(User::find($this->user_id)),
-            'code' => new CodeResource(Code::find($this->code_id)),
-            'comment' => $this->comment,
+            'comment' => $this->body,
             'createdAt' => $this->created_at,
         ];
     }

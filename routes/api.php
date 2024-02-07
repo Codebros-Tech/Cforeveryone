@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CodeCommentController;
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
@@ -22,8 +21,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class,'logout']);
+    // this means that it should execute the /codes/mine route first.
+    Route::get('/codes/mine', [CodeController::class, 'codes']);
     Route::apiResource('codes', CodeController::class);
-    Route::get('/codes/mycodes', [CodeController::class, 'mycodes']);
     Route::post('/me', [AuthController::class, 'me']);
     Route::delete('/user', [AuthController::class, 'delete']);
 
@@ -33,7 +33,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // things related to a user.
     Route::get('/users', [HomeController::class, 'users']);
 
-    Route::apiResource('/codes/{code:id}/comments', CodeCommentController::class);
+    // comment routes section
+    Route::get('/codes/{code:id}/comments', [CodeController::class, 'comments']);
+    Route::post('/codes/{code:id}/comments', [CodeController::class, 'comment']);
 
     Route::get('/codes/{code:id}/likes', [CodeController::class, 'getLikeState']);
     Route::post('/codes/{code:id}/like', [CodeController::class, 'changeLikeState']);

@@ -55,29 +55,29 @@ export default function Dashboard() {
             })
     }, []);
 
-    echo.join('chat.1')
-        .here((users) => {
-            // contains information about all the users connected to this channel
-            console.log(users);
-        })
-        .joining((user) => {
-            // initiated when a new user joins the channel
-            console.log(user.name, ' Joined the channel');
-        })
-        .leaving((user) => {
-            //  initiated when a user leaves the channel
-            console.log(user.name);
-        })
-        .error((error) => {
-            // contains any error that happens in communication
-            console.error(error);
-        });
+    // echo.join('chat.1')
+    //     .here((users) => {
+    //         // contains information about all the users connected to this channel
+    //         console.log(users);
+    //     })
+    //     .joining((user) => {
+    //         // initiated when a new user joins the channel
+    //         console.log(user.name, ' Joined the channel');
+    //     })
+    //     .leaving((user) => {
+    //         //  initiated when a user leaves the channel
+    //         console.log(user.name);
+    //     })
+    //     .error((error) => {
+    //         // contains any error that happens in communication
+    //         console.error(error);
+    //     });
 
     return (
         <PageComponent title="Dashboard"  buttons={(
             <div className='flex gap-2'>
-                <TButton color='green' to="/codes/mycodes">
-                    All My Codes
+                <TButton color='green' to="/codes/mine">
+                    My Codes
                 </TButton>
                 <TButton color='green' to="/codes">
                     All Codes

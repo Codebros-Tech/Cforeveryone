@@ -12,7 +12,7 @@ export default function MyCodes() {
 
     useEffect(() => {
         setLoading(true);
-        axiosClient.get('/codes')
+        axiosClient.get('/codes/mine')
             .then(({data}) => {
                 setMyCodes(data.codes);
                 setLoading(false);

@@ -43,7 +43,7 @@ const router = createBrowserRouter(
                 <Route path="/dashboard" element={<Dashboard />} />
 
                 <Route path="/codes" element={<CodeIndex />} />
-                <Route path="/codes/mycodes" element={<MyCodes />} />
+                <Route path="/codes/mine" element={<MyCodes />} />
                 <Route path="/codes/create" element={<CodeCreate />} />
                 <Route path="/codes/:id/edit" element={<CodeCreate />} />
                 <Route path="/codes/:id" element={<CodeShow />} />

@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\CodeDeletedEvent;
 use App\Events\CodePushedEvent;
-use App\Jobs\ProcessCode;
+use App\Http\Resources\CommentResource;
 use App\Models\Code;
 use App\Http\Requests\StoreCodeRequest;
 use App\Http\Requests\UpdateCodeRequest;
 use App\Http\Resources\CodeResource;
-use App\Models\CodeLike;
-use App\Models\User;
-use http\Env\Response;
+use App\Models\Comment;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 
 class CodeController extends Controller
@@ -21,31 +20,35 @@ class CodeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request): Response
     {
-        /** @var User $user */
-
-        // the index method will return the everybodies code sorted by the date they were posted
-        $codes = Code::all();
+        $user = $request->user();
+       if (Cache::has('codes')) {
+           $codes = Cache::get('codes');
+       } else {
+           Cache::put('codes', Code::orderBy('id', 'DESC')->get(), $seconds = 5);
+       }
 
         return response([
             'codes' => CodeResource::collection($codes),
         ]);
     }
 
-    public function mycodes(Request $request) {
+    public function codes(Request $request): Response {
         $user = $request->user();
 
-        $codes = $user->codes();
+        $codes = $user->codes()->where('user_id', $user->id)->orderBy('id', 'DESC')->get();
 
-        return CodeResource::collection($codes);
+        return response([
+            'codes' => CodeResource::collection($codes)
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      * @throws \Exception
      */
-    public function store(StoreCodeRequest $request)
+    public function store(StoreCodeRequest $request): Response
     {
         $data = $request->validated();
 
@@ -69,7 +72,7 @@ class CodeController extends Controller
         ]);
     }
 
-    public function changeLikeState(Code $code ,Request $request) {
+    public function changeLikeState(Code $code ,Request $request) : Response {
         // check if any like states already exist
         //st in the database
         if ($code->likes()->where('user_id', $request->user()->id)->first()) {
@@ -87,7 +90,7 @@ class CodeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Code $code)
+    public function show(Code $code): Response
     {
         return response([
             'code' => new CodeResource($code),
@@ -97,7 +100,7 @@ class CodeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCodeRequest $request, Code $code)
+    public function update(UpdateCodeRequest $request, Code $code): Response
     {
         $updatedCode = $request->validated();
 
@@ -132,7 +135,7 @@ class CodeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Code $code, Request $request)
+    public function destroy(Code $code, Request $request): Response
     {
         if ($request->user()->id === $code->user_id) {
 
@@ -150,5 +153,30 @@ class CodeController extends Controller
         return response("Unauthorized Action", 403);
     }
 
+    // working with the comment section
+    public function comments(Code $code): Response {
+        $comments = $code->comments()->orderBy('id', 'DESC')->get();
+
+        return response([
+            'code' => $code,
+            'comments' => CommentResource::collection($comments),
+        ]);
+    }
+
+    public function comment(Code $code, Request $request) : Response {
+        $data = $request->validate([
+            'comment' => 'required|string',
+        ]);
+
+        $comment = $code->comments()->save(new Comment([
+            'user_id' => $request->user()->id,
+            'body' => $data['comment']
+        ]));
+
+        return response([
+            'status' => 'created successfully',
+            'comment' => new CommentResource($comment),
+        ]);
+    }
 
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,12 @@ class CodeFactory extends Factory
      */
     public function definition(): array
     {
+        $maxId = User::max('id');
         return [
-            //
+            'user_id' => $this->faker->numberBetween(1, $maxId),
+            'title' => $this->faker->title(),
+            'description' => $this->faker->text(20),
+            'text' => $this->faker->text(200),
         ];
     }
 }

@@ -62,6 +62,7 @@ export default function Code({thecode, commentHide = false}) {
                 duration: 1,
                 type: "spring",
             }}
+            viewport={{ once: true}}
             whileInView={{
                 scale: 1,
                 opacity: 1

@@ -4,6 +4,9 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -25,13 +28,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'matricule',
         'profile',
-        'about',
-        'school',
-        'username',
-        'department',
-        'level',
         'email',
         'password',
     ];
@@ -66,23 +63,19 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function likes() {
-        $this->hasMany(CodeLike::class);
+    // Working with user roles
+    public function roles(): BelongsToMany {
+        return $this->belongsToMany(Role::class);
     }
 
-    // return all of the comments this user has ever posted
-    public function comments() {
-        return $this->hasMany(CodeComment::class);
-    }
-
-    public function codes() {
+    // Working with the codes section
+    public function codes(): HasMany {
         return $this->hasMany(Code::class);
     }
 
-    public function canJoinRoom($roomId): bool
-    {
-        return true;
+    // things relating to comments
+    // morphMany means one user has many comments
+    public function comments() : MorphMany {
+        return $this->morphMany(Comment::class, 'commentable');
     }
-
-
 }

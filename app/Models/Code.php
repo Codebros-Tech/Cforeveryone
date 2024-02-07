@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
  * @method static create(array $array)
@@ -24,32 +26,12 @@ class Code extends Model
     ];
 
     public function user(): BelongsTo {
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
-    public function comments(): HasMany {
-        return $this->hasMany(CodeComment::class);
-    }
-
-    public function likes(): HasMany {
-        return $this->hasMany(CodeLike::class);
-    }
-
-    public function likesByUser($userId): HasMany {
-        return $this->hasMany(CodeLike::class)->where('user_id', $userId);
-    }
-
-    public function suggestions(): HasMany {
-        $this->hasMany(CodeSuggestion::class);
-    }
-
-    // talking about automatically broadcasting the code.
-    public function broadcastOn(string $event): array {
-        // the event string contain the type of event that has occurred. This could be
-        // created, updated, deleted, trashed, restored.
-        return match($event) {
-            'deleted' => [], // returns an array in the case of deleted.
-            default => [$this, $this->user],
-        };
+    // implementing the things relating to comments
+    // morphMany is used in the case of one to many polymorphic relationships
+    public function comments(): MorphMany {
+        return $this->morphMany(Comment::class, 'commentable');
     }
 }

@@ -26,10 +26,10 @@ class CodeResource extends JsonResource
             'errorImage' => URL::to($this->errorImage),
             'user' => new UserResource(User::find($this->user_id)),
             'createdAt' =>$this->created_at,
-            'likes' => $this->likes()->where('state', '=', 1)->count(),
-            'comments' => $this->comments()->count(),
+//            'likes' => $this->likes()->count(),
+//            'comments' => $this->comments()->count(),
             'suggestions' => 0,
-            'userLikeStatus' => $this->likes()->where('user_id', '=', $request->user()->id)->first(),
+//            'userLikeStatus' => $this->likes()->where('user_id', '=', $request->user()->id)->first(),
         ];
     }
 }
