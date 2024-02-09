@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // things related to a user.
     Route::get('/users', [HomeController::class, 'users']);
+    Route::get('/users', [HomeController::class, 'users']);
 
     // comment routes section
     Route::get('/codes/{code:id}/comments', [CodeController::class, 'comments']);

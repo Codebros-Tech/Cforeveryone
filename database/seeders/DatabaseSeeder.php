@@ -32,6 +32,15 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(10),
         ]);
 
+        User::create([
+            'name' => "Funwi Kelsea Ndohnwi",
+            'email' => 'kelseafunwi@gmail.com',
+            'password' => bcrypt("Fe18a135c."),
+            'two_factor_secret' => null,
+            'two_factor_recovery_codes' => null,
+            'remember_token' => Str::random(10),
+        ]);
+
         Code::factory()->count(20)->create();
     }
 }

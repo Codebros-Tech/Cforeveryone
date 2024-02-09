@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\CodePushedEvent;
+use App\Events\CommentAdded;
 use App\Http\Resources\CommentResource;
 use App\Models\Code;
 use App\Http\Requests\StoreCodeRequest;
@@ -26,7 +27,8 @@ class CodeController extends Controller
        if (Cache::has('codes')) {
            $codes = Cache::get('codes');
        } else {
-           Cache::put('codes', Code::orderBy('id', 'DESC')->get(), $seconds = 5);
+           $codes =  Code::orderBy('id', 'DESC')->get();
+           Cache::put('codes', $codes, $seconds = 5);
        }
 
         return response([
@@ -155,10 +157,10 @@ class CodeController extends Controller
 
     // working with the comment section
     public function comments(Code $code): Response {
-        $comments = $code->comments()->orderBy('id', 'DESC')->get();
+        $comments = $code->comments()->get();
 
         return response([
-            'code' => $code,
+            'code' => new CodeResource($code),
             'comments' => CommentResource::collection($comments),
         ]);
     }
@@ -173,9 +175,10 @@ class CodeController extends Controller
             'body' => $data['comment']
         ]));
 
+        CommentAdded::dispatch($code->id, $comment);
+
         return response([
-            'status' => 'created successfully',
-            'comment' => new CommentResource($comment),
+            'status' => "Success adding the comment'",
         ]);
     }
 

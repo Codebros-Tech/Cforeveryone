@@ -3,7 +3,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import PropTypes from 'prop-types'
 
-export default function Modal({yesFunction ,title ,text}) {
+export default function Modal({yesFunction ,title ,text, setModalState}) {
 
   const [open, setOpen] = useState(true);
 
@@ -59,12 +59,12 @@ export default function Modal({yesFunction ,title ,text}) {
                     className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
                     onClick={() => {setOpen(false); yesFunction();}}
                   >
-                    Deactivate
+                    Continue
                   </button>
                   <button
                     type="button"
                     className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                    onClick={() => {setOpen(false); window.location.reload()}}
+                    onClick={() => {setOpen(false); setModalState(false)}}
                     ref={cancelButtonRef}
                   >
                     Cancel
@@ -82,6 +82,7 @@ export default function Modal({yesFunction ,title ,text}) {
 
 Modal.propTypes = {
     yesFunction: PropTypes.func,
+    setModalState: PropTypes.func,
     title: PropTypes.string,
     text: PropTypes.string,
 }

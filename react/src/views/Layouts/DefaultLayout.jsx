@@ -53,8 +53,9 @@ export default function DefaultLayout() {
         })
         .catch((error) => {
             console.error("Error occured during deleting the user", error);
+            showToast("Couldn't delete the account");
+            setModalState(false);
         });
-        navigate('/');
     }
 
     const logout = (ev) => {
@@ -76,7 +77,7 @@ export default function DefaultLayout() {
     }
 
     if (modalState) {
-        return <Modal yesFunction={deleteFun} text={modalText} title={modalTitle} />
+        return <Modal yesFunction={deleteFun} text={modalText} title={modalTitle} setModalState={setModalState} />
     }
 
     // default layout should have a function that will count the number of issues posted

@@ -81,7 +81,6 @@ public function login(LoginRequest $request) {
         // delete the user token,
         $user = $request->user();
         $token = $request->user()->currentAccessToken();
-        $token->delete();
 
         // delete the image of the user
         if ($user->image) {
@@ -89,11 +88,13 @@ public function login(LoginRequest $request) {
                 File::delete($user->image);
             }
         }
+        // delete all the comments this user made
 
-        // delete all of the user and everything the user has every created.
+
 
         // delete the user information
         $user->delete();
+        $token->delete();
 
         return response('Delete successful', 200);
     }

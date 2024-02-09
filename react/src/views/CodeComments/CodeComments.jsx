@@ -1,6 +1,6 @@
 import PageComponent from "../../components/PageComponent";
 import TButton from "../../components/TButton";
-import {  useEffect, useRef, useState } from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import axiosClient from "../../axios";
 import { useParams } from "react-router-dom";
 import Code from '../Code/Code'
@@ -8,7 +8,7 @@ import Comment from '../Code/Comment'
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
 import { useNavigate } from 'react-router-dom'
 import echo from "../../echo.js";
-
+import {StateContext} from "../../contexts/ContextProvider.jsx";
 
 export default function CodeComments() {
     const { id } = useParams();
@@ -20,6 +20,8 @@ export default function CodeComments() {
 
     const navigate = useNavigate();
 
+    const { currentUser  } = useContext(StateContext);
+
 
     useEffect(() => {
         setLoading(true);
@@ -30,20 +32,20 @@ export default function CodeComments() {
             setCode(data.code);
             setLoading(false);
         }).catch((error) => {
-            // redirect the user back to the codes page if an error occured getting the comments
+            // redirect the user back to the codes page if an error occurs when getting the comments
             console.log(error);
             navigate('/codes');
         });
 
-    }, []);
+    }, [id, navigate]);
 
     // this part will keep track of the changes in the comments.
-    const commentChannel = echo.channel('public.code.'+id);
+    const commentChannel = echo.channel('public.code.'+id+'.comment');
     commentChannel.subscribed(function() {
         console.log("Subscribed to the comment channel");
     })
         .listen('.comment', (event) => {
-            comments.push(event.comment);
+            console.log("The event information " , event);
             setComments([...comments, event.comment]);
         });
 
@@ -55,7 +57,9 @@ export default function CodeComments() {
         axiosClient.post(`/codes/${id}/comments`, {
             code_id: code.id,
             comment: comment,
-        });
+        }).then((r) => {
+            console.log(r);
+        })
     }
 
     return (
@@ -70,13 +74,16 @@ export default function CodeComments() {
             </div>
         )
         }
-        small={`Code Description ${code.description}`}
+        small={`${code.description}`}
         >
 
             {
                 !loading  &&
                 <div>
-                    <Code thecode={code} commentHide />
+                    <div className={"flex flex-col items-center sm:block"}>
+                        <Code thecode={code} commentHide/>
+                    </div>
+
                     <form onSubmit={submitComment}>
                         <div className="w-full relative">
                             <div className="relative">
@@ -87,25 +94,25 @@ export default function CodeComments() {
                             </button>
                         </div>
                     </form>
-                {
-                    comments &&
-                        <div className="max-w-[1200px] border-2  mx-auto px-2 py-4">
-                            {
-                                comments.map((comment, index) => (
-                                    <div key={index}>
-                                        <Comment comment={comment} />
-                                    </div>
-                                ))
-                            }
-                        </div>
-                }
-                {
-                    comments.length === 0 &&
-                        <div className="flex justify-center items-center">
-                            This code does not have any comments
-                        </div>
-                }
-            </div>
+                    {
+                        comments &&
+                            <div className="max-w-[1200px] h-[70vh] overflow-auto border-2  mx-auto px-2 py-4">
+                                {
+                                    comments.map((comment, index) => (
+                                        <div key={index}>
+                                            <Comment comment={comment} />
+                                        </div>
+                                    ))
+                                }
+                            </div>
+                    }
+                    {
+                        comments.length === 0 &&
+                            <div className="flex justify-center items-center">
+                                This code does not have any comments
+                            </div>
+                    }
+                </div>
             }
             {
                 loading &&
