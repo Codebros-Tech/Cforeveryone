@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => "Funwi Kelsea Ndohnwi",
             'email' => 'funwikelseandohnwi@gmail.com',
-            'password' => bcrypt("Fe18a135c."),
+            'password' => bcrypt("something"),
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'remember_token' => Str::random(10),
@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => "Funwi Kelsea Ndohnwi",
             'email' => 'kelseafunwi@gmail.com',
-            'password' => bcrypt("Fe18a135c."),
+            'password' => bcrypt("something"),
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'remember_token' => Str::random(10),

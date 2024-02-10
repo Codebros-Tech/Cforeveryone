@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\BroadcastsEvents;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -33,5 +34,9 @@ class Code extends Model
     // morphMany is used in the case of one to many polymorphic relationships
     public function comments(): MorphMany {
         return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    public function codeViews(): HasMany {
+        return $this->hasMany(CodeView::class);
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\SignupRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -77,7 +78,7 @@ public function login(LoginRequest $request) {
         return new UserResource($request->user());
     }
 
-    public function delete(Request $request) {
+    public function delete(Request $request) : Response {
         // delete the user token,
         $user = $request->user();
         $token = $request->user()->currentAccessToken();
@@ -88,9 +89,23 @@ public function login(LoginRequest $request) {
                 File::delete($user->image);
             }
         }
+
+
         // delete all the comments this user made
+        foreach($user->comments as $comment) {
+            $comment->delete();
+        }
 
+        // all the codes that this user has posted
+        foreach($user->codes as $code) {
+            $code->delete();
+        }
 
+//        // deleting all of the likes that this user has made
+        // i will uncomment this part of the code after i have implemented the like functionality.
+//        foreach($user->likes as $like) {
+//            $like->delete();
+//        }
 
         // delete the user information
         $user->delete();

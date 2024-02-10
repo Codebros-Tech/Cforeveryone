@@ -9,12 +9,14 @@ use App\Models\Code;
 use App\Http\Requests\StoreCodeRequest;
 use App\Http\Requests\UpdateCodeRequest;
 use App\Http\Resources\CodeResource;
+use App\Models\CodeView;
 use App\Models\Comment;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
+use function PHPUnit\Framework\isEmpty;
 
 class CodeController extends Controller
 {
@@ -179,6 +181,34 @@ class CodeController extends Controller
 
         return response([
             'status' => "Success adding the comment'",
+        ]);
+    }
+
+    public function viewed(Code $code, Request $request): Response {
+        // validating the data
+        $data = $request->validate([
+            'duration' => "required|integer",
+        ]);
+
+        $codeView = $code->codeViews()->where('user_id', $request->user()->id)->get();
+        $codeViewCount = $codeView->count();
+
+        if ($codeViewCount !== 0 ) {
+            return response([
+                'codeView' => $codeView,
+            ]);
+        }
+
+        $codeView = new CodeView([
+            'user_id' => $request->user()->id,
+            'code_id' => $code->id,
+            'duration' => $data['duration']
+        ]);
+
+        $codeView->save();
+
+        return response([
+            'code_view' => $codeView,
         ]);
     }
 

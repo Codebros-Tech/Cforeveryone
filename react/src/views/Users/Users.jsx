@@ -22,14 +22,6 @@ export default function People() {
 
     }, [])
 
-    echo.private('private.server')
-        .subscribed(() => {
-            console.log('subscribed to ');
-        })
-        .listen('.server.created', (event) => {
-            console.log(event);
-        });
-
     return (
         <PageComponent title="Find People" small="Find other people on the platform.">
             {

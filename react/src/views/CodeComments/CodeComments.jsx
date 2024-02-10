@@ -1,6 +1,6 @@
 import PageComponent from "../../components/PageComponent";
 import TButton from "../../components/TButton";
-import {useContext, useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import axiosClient from "../../axios";
 import { useParams } from "react-router-dom";
 import Code from '../Code/Code'
@@ -8,36 +8,54 @@ import Comment from '../Code/Comment'
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
 import { useNavigate } from 'react-router-dom'
 import echo from "../../echo.js";
-import {StateContext} from "../../contexts/ContextProvider.jsx";
 
 export default function CodeComments() {
     const { id } = useParams();
     const [loading, setLoading ] = useState(false);
     const [comments, setComments] = useState([]);
     const [code, setCode] = useState({});
+    const [startTime, setStartTime ] = useState(performance.now());
 
     const commentRef = useRef(null);
 
     const navigate = useNavigate();
 
-    const { currentUser  } = useContext(StateContext);
+    useEffect(() => {
+        window.addEventListener('unload', sendRequest);
+        return () => {
+            window.removeEventListener('unload', sendRequest);
+        }
+    }, []);
 
+    const sendRequest = async () => {
+        try {
+            const endTime = performance.now();
+            const durationFloat = (endTime - startTime) / 1000;
+            const duration = parseInt(durationFloat.toString());
+            console.log('duration so far is ', duration);
+            axiosClient.post(`/codes/${id}/viewed`, {
+                duration: duration,
+            }).then(({data}) => {
+                console.log(data);
+            })
+        } catch ( error) {
+            console.log("error occurred", error);
+        }
+    }
 
     useEffect(() => {
         setLoading(true);
-        // this fetches all the comments for this post first .
         axiosClient.get(`/codes/${id}/comments`)
         .then(({data}) => {
             setComments(data.comments);
             setCode(data.code);
             setLoading(false);
-        }).catch((error) => {
-            // redirect the user back to the codes page if an error occurs when getting the comments
-            console.log(error);
+        }).catch(() => {
+            // redirect the user back to the codes page if an error occurs when getting the comment
             navigate('/codes');
-        });
+        })
 
-    }, [id, navigate]);
+    }, [id]);
 
     // this part will keep track of the changes in the comments.
     const commentChannel = echo.channel('public.code.'+id+'.comment');
@@ -68,7 +86,7 @@ export default function CodeComments() {
                 <TButton color='green' to="/codes/create">
                     New
                 </TButton>
-                <TButton color='green' to="/codes/mycodes">
+                <TButton color='green' to="/codes/mine">
                     My Codes.
                 </TButton>
             </div>

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-export default function PageComponent({small = "" ,title, buttons = "", children}) {
+export default function PageComponent({small = "" ,title, buttons, children}) {
     return (
         <>
             <header className="bg-white shadow">

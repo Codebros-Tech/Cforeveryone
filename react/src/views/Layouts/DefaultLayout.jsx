@@ -49,10 +49,12 @@ export default function DefaultLayout() {
         axiosClient.delete('/user')
         .then((response) => {
             console.log(response);
+            setCurrentUser(null);
+            setUserToken(null);
             showToast("Account Deleted Successfully");
         })
         .catch((error) => {
-            console.error("Error occured during deleting the user", error);
+            console.error("Error occurs during deleting the user", error);
             showToast("Couldn't delete the account");
             setModalState(false);
         });

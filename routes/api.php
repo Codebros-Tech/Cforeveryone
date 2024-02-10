@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/codes/mine', [CodeController::class, 'codes']);
     Route::apiResource('codes', CodeController::class);
     Route::post('/me', [AuthController::class, 'me']);
+
     Route::delete('/user', [AuthController::class, 'delete']);
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
@@ -32,11 +33,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // things related to a user.
     Route::get('/users', [HomeController::class, 'users']);
-    Route::get('/users', [HomeController::class, 'users']);
 
     // comment routes section
     Route::get('/codes/{code:id}/comments', [CodeController::class, 'comments']);
     Route::post('/codes/{code:id}/comments', [CodeController::class, 'comment']);
+    Route::post('/codes/{code:id}/viewed', [CodeController::class, 'viewed']);
 
     Route::get('/codes/{code:id}/likes', [CodeController::class, 'getLikeState']);
     Route::post('/codes/{code:id}/like', [CodeController::class, 'changeLikeState']);

@@ -74,8 +74,16 @@ class User extends Authenticatable
     }
 
     // things relating to comments
-    // morphMany means one user has many comments
-    public function comments() : MorphMany {
+    // morphMany means one user has many comments and other model could also be having this many comments.
+    public function commentsToMe() : MorphMany {
         return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    public function comments(): HasMany {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function codeViews(): HasMany {
+        return $this->hasMany(CodeView::class);
     }
 }

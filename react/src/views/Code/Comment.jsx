@@ -14,7 +14,9 @@ export default function Comment({comment}) {
             </div>
             <hr />
             <div className='mt-1'>
-                {comment.comment}
+                <pre className={"whitespace-pre-wrap"}>
+                    {comment.comment}
+                </pre>
             </div>
             <div className='text-right text-[12px] flex items-center px-2 justify-end'>
                 {comment.createdAt}
