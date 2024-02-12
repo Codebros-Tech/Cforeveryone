@@ -23,8 +23,8 @@ export default function Hero() {
                         <span className="sr-only">Cforeveryone</span>
                         <img
                             className="h-8 w-auto"
-                            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                            alt=""
+                            src={"logo.svg"}
+                            alt="Logo Image"
                         />
                         </Link>
                     </div>

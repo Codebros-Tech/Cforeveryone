@@ -1,72 +1,59 @@
-import PageComponent from "../../components/PageComponent";
-import TButton from "../../components/TButton";
+import PageComponent from "../../components/PageComponent.jsx";
+import TButton from "../../components/TButton.jsx";
 import {useEffect, useRef, useState} from "react";
-import axiosClient from "../../axios";
+import axiosClient from "../../axios.js";
 import { useParams } from "react-router-dom";
-import Code from '../Code/Code'
-import Comment from '../Code/Comment'
+import Code from './Code.jsx'
+import Comment from './Comment.jsx'
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
 import { useNavigate } from 'react-router-dom'
 import echo from "../../echo.js";
 
-export default function CodeComments() {
+export default function CodeView() {
     const { id } = useParams();
     const [loading, setLoading ] = useState(false);
     const [comments, setComments] = useState([]);
     const [code, setCode] = useState({});
-    const [startTime, setStartTime ] = useState(performance.now());
-
+    const [startTime, setStartTime ] = useState(0.0);
     const commentRef = useRef(null);
-
     const navigate = useNavigate();
-
-    useEffect(() => {
-        window.addEventListener('unload', sendRequest);
-        return () => {
-            window.removeEventListener('unload', sendRequest);
-        }
-    }, []);
-
-    const sendRequest = async () => {
-        try {
-            const endTime = performance.now();
-            const durationFloat = (endTime - startTime) / 1000;
-            const duration = parseInt(durationFloat.toString());
-            console.log('duration so far is ', duration);
-            axiosClient.post(`/codes/${id}/viewed`, {
-                duration: duration,
-            }).then(({data}) => {
-                console.log(data);
-            })
-        } catch ( error) {
-            console.log("error occurred", error);
-        }
-    }
 
     useEffect(() => {
         setLoading(true);
         axiosClient.get(`/codes/${id}/comments`)
-        .then(({data}) => {
-            setComments(data.comments);
-            setCode(data.code);
-            setLoading(false);
-        }).catch(() => {
-            // redirect the user back to the codes page if an error occurs when getting the comment
-            navigate('/codes');
-        })
+            .then(({data}) => {
+                setComments(data.comments);
+                setCode(data.code);
+                setLoading(false);
+            }).catch(() => {
+                navigate('/codes');
+            });
 
+        const initialTime = performance.now();
+        setStartTime(initialTime);
+
+        return () => {
+            sendRequest()
+        }
     }, [id]);
 
-    // this part will keep track of the changes in the comments.
-    const commentChannel = echo.channel('public.code.'+id+'.comment');
-    commentChannel.subscribed(function() {
-        console.log("Subscribed to the comment channel");
-    })
-        .listen('.comment', (event) => {
-            console.log("The event information " , event);
-            setComments([...comments, event.comment]);
+    const sendRequest = () => {
+        const endTime = performance.now();
+        const durationFloat = (endTime - startTime) / 1000;
+        const duration =  durationFloat.toFixed(0);
+        axiosClient.post(`/codes/${id}/viewed`, {
+            duration: duration,
+        }).then(({data}) => {
+            console.log(data);
+        }).catch((error) => {
+            console.error(error);
         });
+    }
 
+    const commentChannel = echo.channel('public.code.'+id+'.comment');
+    commentChannel.listen('.comment', (event) => {
+        setComments([...comments, event.comment]);
+    });
 
     const submitComment = (ev) => {
         ev.preventDefault();
@@ -75,8 +62,8 @@ export default function CodeComments() {
         axiosClient.post(`/codes/${id}/comments`, {
             code_id: code.id,
             comment: comment,
-        }).then((r) => {
-            console.log(r);
+        }).catch((error) => {
+            console.error(error);
         })
     }
 
@@ -94,14 +81,12 @@ export default function CodeComments() {
         }
         small={`${code.description}`}
         >
-
             {
                 !loading  &&
                 <div>
                     <div className={"flex flex-col items-center sm:block"}>
                         <Code thecode={code} commentHide/>
                     </div>
-
                     <form onSubmit={submitComment}>
                         <div className="w-full relative">
                             <div className="relative">

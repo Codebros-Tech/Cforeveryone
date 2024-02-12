@@ -21,7 +21,7 @@ import CodeCreate from "./views/Code/CodeCreate"
 import CodeShow from "./views/Code/CodeShow"
 import CodeIndex from "./views/Code/CodeIndex"
 import MyCodes from "./views/Code/MyCodes"
-import CodeComments from './views/CodeComments/CodeComments'
+import CodeView from './views/Code/CodeView.jsx'
 import Contact from "./views/Pages/Contact"
 
 const router = createBrowserRouter(
@@ -48,7 +48,7 @@ const router = createBrowserRouter(
                 <Route path="/codes/:id/edit" element={<CodeCreate />} />
                 <Route path="/codes/:id" element={<CodeShow />} />
 
-                <Route path="/codes/:id/comments" element={<CodeComments />} />
+                <Route path="/codes/:id/comments" element={<CodeView />} />
 
                 <Route path="/users" element={<Users />} />
                 <Route path="/users/:username" element={<AccountInfo />} />

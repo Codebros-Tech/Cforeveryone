@@ -185,19 +185,17 @@ class CodeController extends Controller
     }
 
     public function viewed(Code $code, Request $request): Response {
-        // validating the data
+        $totalViews = $code->codeViews()->where('user_id', $request->user()->id)->get()->count();
+
+        if ($totalViews !== 0) {
+            return response([
+                'status' => 'first duration is noted',
+            ]);
+        }
+
         $data = $request->validate([
             'duration' => "required|integer",
         ]);
-
-        $codeView = $code->codeViews()->where('user_id', $request->user()->id)->get();
-        $codeViewCount = $codeView->count();
-
-        if ($codeViewCount !== 0 ) {
-            return response([
-                'codeView' => $codeView,
-            ]);
-        }
 
         $codeView = new CodeView([
             'user_id' => $request->user()->id,

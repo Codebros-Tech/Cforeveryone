@@ -6,7 +6,6 @@ import Toast from '../../components/Toast'
 import axiosClient from '../../axios'
 import { StateContext } from '../../contexts/ContextProvider'
 import Modal from "../../components/Modal.jsx"
-import echo from '../../echo.js'
 
 const navigation = [
   { name: 'Dashboard', to: '/dashboard'},
@@ -70,7 +69,7 @@ export default function DefaultLayout() {
             }).catch((error) => {
                 console.log(error);
                 localStorage.clear();
-                showToast('Logut successful')
+                showToast('Logout successful')
             })
     }
 
@@ -96,7 +95,7 @@ export default function DefaultLayout() {
                             <div className="flex-shrink-0">
                             <img
                                 className="h-8 w-8"
-                                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                                src="logo.svg"
                                 alt="Cforeveryone"
                             />
                             </div>

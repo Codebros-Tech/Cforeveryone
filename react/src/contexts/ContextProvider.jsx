@@ -1,8 +1,6 @@
 import {useState, createContext, useEffect} from "react"
 import PropTypes from 'prop-types';
-import Echo from "laravel-echo";
 
-// we initialize the variables so as to make the editor able to carry out autocomplete functionality
 export const StateContext = createContext({
     currentUser: {},
     setCurrentUser: () => {},
@@ -24,7 +22,6 @@ export const ContextProvider = ({ children }) => {
 
     const [toast, setToast] = useState({ message: "", show: false});
 
-    // this state will be used to make the user information available globally if the user is logged in
     const [ currentUser, _setCurrentUser ] = useState({
         name: '',
         profile: '',
@@ -48,9 +45,6 @@ export const ContextProvider = ({ children }) => {
         setMyCodes(newMyCodes);
         setAllCodes(newAllCodes);
     }
-
-
-
 
     const setUserToken = (token) =>  {
         if (token) {
