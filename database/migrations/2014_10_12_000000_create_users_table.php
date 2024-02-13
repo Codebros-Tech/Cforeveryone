@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->integer('points')->default(0);
             $table->string('profile')->nullable();
+            $table->timestamp('last_login_time')->nullable();
             $table->rememberToken();
             $table->foreignId('current_team_id')->nullable();
             $table->timestamps();

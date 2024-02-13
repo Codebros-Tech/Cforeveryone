@@ -75,6 +75,10 @@ public function login(LoginRequest $request) {
     }
 
     public function me(Request $request) {
+        $user = User::find($request->user()->id)->update([
+            'last_login_time' => new \DateTime('now'),
+        ]);
+
         return new UserResource($request->user());
     }
 

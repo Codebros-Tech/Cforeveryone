@@ -69,7 +69,7 @@ class CodeController extends Controller
             'errorImage' => $data['errorImage'],
         ]);
 
-        CodePushedEvent::dispatch($code, 'pushed');
+        CodePushedEvent::dispatch($code);
 
         return response([
             'status' => 'Code Stored'
@@ -118,8 +118,6 @@ class CodeController extends Controller
             $absolutePath = public_path($code->errorImage);
             File::delete($absolutePath);
         }
-
-        CodePushedEvent::dispatch($code, 'pushed');
 
 
         // replace the image

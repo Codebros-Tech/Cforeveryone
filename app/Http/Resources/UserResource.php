@@ -20,6 +20,7 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'profile' => URL::to($this->profile),
+            'last_login_time' => $this->last_login_time
         ];
     }
 }

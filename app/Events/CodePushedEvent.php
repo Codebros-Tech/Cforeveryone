@@ -25,10 +25,9 @@ class CodePushedEvent implements ShouldBroadcast
 
     public String $action;
 
-    public function __construct($code, $action)
+    public function __construct($code)
     {
         $this->code = $code;
-        $this->action = $action;
     }
 
     /**
@@ -52,15 +51,6 @@ class CodePushedEvent implements ShouldBroadcast
 
     public function broadcastWith(): array
     {
-//        return match ($this->action) {
-//            'pushed' =>  [
-//                'code' => new CodeResource($this->code),
-//            ],
-//            'deleted' =>  [
-//                'id' => $this->code->id,
-//            ],
-//            default => [],
-//        };
         return [
             'code' => new CodeResource($this->code),
         ];
