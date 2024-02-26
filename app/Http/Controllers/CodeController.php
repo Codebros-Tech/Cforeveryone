@@ -71,12 +71,11 @@ class CodeController extends Controller
 
         CodePushedEvent::dispatch($code);
 
-        return response([
-            'status' => 'Code Stored'
-        ]);
+        return response($code, 201);
     }
 
-    public function changeLikeState(Code $code ,Request $request) : Response {
+    public function changeLikeState(Code $code ,Request $request) : \Illuminate\Http\JsonResponse
+    {
         // check if any like states already exist
         //st in the database
         if ($code->likes()->where('user_id', $request->user()->id)->first()) {
@@ -88,7 +87,7 @@ class CodeController extends Controller
             $like = ['user_id' => $request->user()->id, 'code_id' =>$code->id, 'state' => true];
             $like = CodeLike::create($like);
         }
-        return response($like, 200);
+        return response()->json($code, 201);
     }
 
     /**
@@ -149,7 +148,7 @@ class CodeController extends Controller
 
              CodePushedEvent::dispatch($code, 'deleted');
 
-            return response('Delete was successful.', 200);
+            return response($code, 200);
         }
 
         return response("Unauthorized Action", 403);
@@ -179,7 +178,7 @@ class CodeController extends Controller
 
         return response([
             'status' => "Success adding the comment'",
-        ]);
+        ], 201);
     }
 
     public function viewed(Code $code, Request $request): Response {

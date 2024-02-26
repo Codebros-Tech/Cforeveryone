@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
         User::create([
             'name' => "Funwi Kelsea Ndohnwi",
             'email' => 'funwikelseandohwni@gmail.com',
-            'password' => bcrypt("Fe18a135c."),
+            'password' => bcrypt("something"),
             'current_team_id' => null,
         ]);
     }
