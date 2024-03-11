@@ -51,23 +51,7 @@ export default function Code({thecode, commentHide = false}) {
     }
 
     return (
-        <motion.div
-            className="flex rounded w-full mt-3"
-            initial={{
-                scale: 0,
-                opacity: 0,
-                rotate: "0deg"
-            }}
-            transition={{
-                duration: 1,
-                type: "spring",
-            }}
-            viewport={{ once: true}}
-            whileInView={{
-                scale: 1,
-                opacity: 1
-            }}
-        >
+        <div className="flex rounded w-full mt-3">
             {
                 code && code.user &&
                 <div className={"px-2 bg-black text-gray-500 w-full md:w-11/12"}>
@@ -134,7 +118,7 @@ export default function Code({thecode, commentHide = false}) {
                     }
                 </div>
             }
-        </motion.div>
+        </div>
     )
 }
 

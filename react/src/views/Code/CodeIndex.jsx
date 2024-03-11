@@ -20,26 +20,6 @@ export default function CodeIndex() {
             })
     }, []);
 
-    // echo.private('codes')
-    //     .listen('.codes', (event) => {
-    //     console.log("the event was triggered");
-    //     if (event.id) {
-    //         const newCodes = allCodes.filter(code => code.id !== event.id);
-    //         setAllCodes(newCodes);
-    //     } else if (event.code) {
-    //         const newCodes = allCodes.map((code) => {
-    //             if (code.id === event.code.id) {
-    //                 return event.code;
-    //             }
-    //             return code;
-    //         })
-    //         console.log(event.code, " is the new code that has been added");
-    //         // the logic at this point has some faults i need to go through
-    //         setAllCodes([...newCodes, event.code]);
-    //     }
-    // });
-
-
     return (
         <PageComponent title="All Codes" buttons={(
             <div className='flex gap-2'>

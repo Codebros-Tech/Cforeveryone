@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Cassandra\Map;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use function PHPUnit\Framework\isEmpty;
 
 /**
  * @method static create(array $array)
@@ -39,4 +41,29 @@ class Code extends Model
     public function codeViews(): HasMany {
         return $this->hasMany(CodeView::class);
     }
+
+    public function likes(): MorphToMany {
+        return $this->morphToMany(Like::class);
+    }
+
+
+    /**
+     * Provide us with the number of seconds that this user viewed the code for.
+     * @return int
+     */
+    public function getViewDuration($user_id): int {
+        $durationArray =  $this->codeViews()->where('user_id', $user_id)->get();
+        if (isset($durationArray[0])) {
+            return $durationArray[0]->duration;
+        }
+        return 0;
+    }
+
+    /** gets the number of users who commented on this code
+     * @return void
+     */
+    public function getUsersWhoCommented() {
+        $userIds = $this->comments()->where(['user_id']);
+    }
+
 }

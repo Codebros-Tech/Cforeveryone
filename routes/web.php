@@ -49,3 +49,4 @@ Route::get('/newmessage', function () {
     broadcast(\App\Events\NewMessageEvent::class);
     return null;
 });
+

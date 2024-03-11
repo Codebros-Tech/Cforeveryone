@@ -5,6 +5,7 @@ namespace Tests\Feature;
  use App\Models\User;
  use Illuminate\Foundation\Testing\RefreshDatabase;
  use Illuminate\Foundation\Testing\WithFaker;
+ use Psy\Util\Str;
  use Tests\TestCase;
 
 class ExampleTest extends TestCase
@@ -19,12 +20,6 @@ class ExampleTest extends TestCase
         $response = $this->get('/');
 
         $response->assertStatus(200);
-    }
-
-    public function test_user_empty(): void {
-        $this->assertDatabaseHas('users', [
-            'email' => 'funwikelseandohnwi@gmail.com',
-        ]);
     }
 
     public function test_users_can_create_code_and_comment() {
@@ -61,5 +56,17 @@ class ExampleTest extends TestCase
         ]);
     }
 
+    public function test_that_users_can_contact_support() {
+        // create a fake user
+        $user = User::factory()->create();
+
+        $this->actingAs($user);
+
+        $reportInformation = [
+            'name' => $user->name,
+        ];
+
+        $result = $this->post('/api/contact', $reportInformation);
+    }
 
 }

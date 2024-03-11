@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
@@ -65,6 +66,7 @@ class User extends Authenticatable
     ];
 
     // Working with user roles
+
     public function roles(): BelongsToMany {
         return $this->belongsToMany(Role::class);
     }
@@ -86,5 +88,31 @@ class User extends Authenticatable
 
     public function codeViews(): HasMany {
         return $this->hasMany(CodeView::class);
+    }
+
+    public function getPoints() : string {
+        return $this->points;
+    }
+
+    /**
+     * Looks for the code this user posted which had the highest number of views
+     * @return void
+     */
+    public function getCodeHighestViews(): void
+    {
+        $user = Auth::user();
+        // still working on
+    }
+
+    /**return all of the things that have been liked by this user.
+     * @return void
+     */
+    public function getAllLikes() {
+        return Like::all()->where('user_id', $this->id);
+    }
+
+    public function getNotifications(): \Illuminate\Database\Eloquent\Collection
+    {
+        return $this->notifications()->get();
     }
 }
