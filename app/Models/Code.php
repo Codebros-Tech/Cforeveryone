@@ -7,11 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\BroadcastsEvents;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use function PHPUnit\Framework\isEmpty;
 
 /**
  * @method static create(array $array)
@@ -60,10 +58,12 @@ class Code extends Model
     }
 
     /** gets the number of users who commented on this code
-     * @return void
+     * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getUsersWhoCommented() {
-        $userIds = $this->comments()->where(['user_id']);
+    public function getUsersWhoCommented():  \Illuminate\Database\Eloquent\Collection{
+        return $this->comments()->where(['user_id'])->get();
     }
+
+
 
 }

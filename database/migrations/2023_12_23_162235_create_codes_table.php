@@ -16,6 +16,7 @@ return new class extends Migration
             $table->text('title');
             $table->text('description');
             $table->longText('text');
+            $table->string("programming_language")->nullable();
             $table->string('errorImage')->nullable();
             $table->foreignId('user_id')->references('id')->on('users');
             $table->timestamps();
