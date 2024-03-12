@@ -207,4 +207,18 @@ class CodeController extends Controller
         ]);
     }
 
+    public function addCodeSuggestion(Request $request) {
+        $data = $request->validate([
+            'code_id' => 'required|integer',
+            'text' => 'string|required',
+        ]);
+
+        $suggestion = Code::findOrFail($data['code_id'])->suggestion()->create([
+            'code_id' => $data['code_id'],
+            'text' => $data['text']
+        ]);
+
+        return response($suggestion, 201);
+    }
+
 }

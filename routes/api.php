@@ -45,7 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/contact', [HomeController::class, 'contact']);
 
-
+    Route::get('/notifications', [HomeController::class, 'getUserNotifications']);
 });
 
 Route::post('/signup', [AuthController::class, 'signup']);

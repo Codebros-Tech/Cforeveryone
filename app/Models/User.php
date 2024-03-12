@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
@@ -84,6 +85,10 @@ class User extends Authenticatable
 
     public function comments(): HasMany {
         return $this->hasMany(Comment::class);
+    }
+
+    public function suggestions() {
+        return $this->hasMany(Suggestion::class);
     }
 
     public function codeViews(): HasMany {

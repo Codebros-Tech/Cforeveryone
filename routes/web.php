@@ -50,3 +50,4 @@ Route::get('/newmessage', function () {
     return null;
 });
 
+Route::get('/user/notifications', [\App\Http\Controllers\HomeController::class, 'getUserNotifications']);

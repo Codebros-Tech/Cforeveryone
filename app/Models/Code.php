@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
+use GeminiAPI\Laravel\Facades\Gemini;
+
 /**
  * @method static create(array $array)
  */
@@ -34,6 +36,10 @@ class Code extends Model
     // morphMany is used in the case of one to many polymorphic relationships
     public function comments(): MorphMany {
         return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    public function suggestions(): HasMany {
+        return $this->hasMany(Suggestion::class);
     }
 
     public function codeViews(): HasMany {
@@ -64,6 +70,11 @@ class Code extends Model
         return $this->comments()->where(['user_id'])->get();
     }
 
-
+    // use the http method to make request to the server to return a cleaner version of this code.
+    public function getCleanVersion(): string {
+        $cleanerCode = Gemini::generateText("Reformat the following code for readability: \n" . $this->text);
+        $cleanerCode = Gemini::generateText("Improve variable and function names in the following code for clarity: \n" . $this->text);
+        return $cleanerCode;
+    }
 
 }

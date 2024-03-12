@@ -36,4 +36,10 @@ class HomeController extends Controller
             return response("Error durring creation of the contact message", 500);
         }
     }
+
+    public function getUserNotifications(Request $request) {
+        $user = $request->user();
+
+        return $user->notifications()->get();
+    }
 }
