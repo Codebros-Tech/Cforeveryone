@@ -25,11 +25,7 @@ export default function Login() {
             setCurrentUser(data.user);
             setUserToken(data.token);
         }).catch((error) => {
-            if (error.response) {
-                const finalErrors = Object.values(error.response.data.errors).reduce((accum, next) => [...accum, ...next], []);
-                // <br /> will be added at the end of each string to move us to the next line.
-                setErrors({__html: finalErrors.join("<br>")})
-            }
+
             console.log(error);
         })
     }
