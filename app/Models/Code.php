@@ -72,9 +72,10 @@ class Code extends Model
 
     // use the http method to make request to the server to return a cleaner version of this code.
     public function getCleanVersion(): string {
-        $cleanerCode = Gemini::generateText("Reformat the following code for readability: \n" . $this->text);
-        $cleanerCode = Gemini::generateText("Improve variable and function names in the following code for clarity: \n" . $this->text);
-        return $cleanerCode;
+        $cleanCode = Gemini::generateText("Reformat the following code for readability: \n" . $this->text);
+        return Gemini::generateText("Improve variable and function names in the following code for clarity: \n" . $this->text);
     }
+
+
 
 }
